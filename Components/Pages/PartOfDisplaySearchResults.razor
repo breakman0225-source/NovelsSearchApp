@@ -1,0 +1,38 @@
+@using NovelsSearchApp.Components.Pages;
+@using NovelsSearchApp.Components.Pages.UserInput;
+@using NovelsSearchApp.NovelModels;
+@rendermode InteractiveServer
+
+@namespace NovelsSearchApp.Components.Pages
+
+@*Begin novel results*@
+<div>
+    @if(novelsResult.CheckNetworkSuccess)
+    {
+        @if(novelsResult.novels == null)
+        {
+            <span>読み込み中です...</span>
+        }
+        @*I will add else if statement for no results later. I plan to make program that measures the time null is assigned to novels and if it exceeds certain time, it will display some messages.*@
+        else
+        {
+            @foreach(var novel in novelsResult.novels)
+            {
+                <div>
+                    <span>@novel.Title</span>
+                    <span>@novel.Writer</span>            
+                </div>
+            }
+        }
+    }
+    else
+    {
+        <span>ネットワーク接続に失敗しました。再試行してください。</span>
+    }
+</div>
+@*End novel results*@
+
+    
+@code{
+    NovelsSearch novelsResult = new NovelsSearch();
+}

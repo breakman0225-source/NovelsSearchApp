@@ -1,0 +1,35 @@
+@*this area is used fot any directive.*@
+@namespace NovelsSearchApp.Components.Pages.UserInput
+
+@*Begin novel Search field.*@
+<h2>小説検索</h2>
+
+<div>
+    <div>
+        <span>検索条件</span>
+        <span>除外条件</span>
+    </div>
+
+    <div>
+        <span>検索優先度高</span>
+        <input type="text"/>
+        <span>除外優先度高</span>
+        <input type="text"/>
+    </div>
+
+    <div>
+        <span>検索優先度低</span>
+        <input type="text"/>
+        <span>除外優先度低</span>
+        <input type="text"/>
+    </div>
+
+    <div>
+        <button type="submit" @onclick="OnClickToSearch">検索</button>
+    </div>
+</div>
+@*End novel Search field*@
+
+@code{
+    [Parameter] public EventCallback OnClickToSearch { get; set; }
+}

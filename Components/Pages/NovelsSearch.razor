@@ -1,0 +1,20 @@
+﻿@page "/"
+@using System.Diagnostics;
+@using NovelsSearchApp;
+@using NovelsSearchApp.Components.Pages;
+@using NovelsSearchApp.Components.Pages.UserInput;
+@rendermode InteractiveServer
+
+<PageTitle>なろう小説検索</PageTitle>
+
+@*Begin novels search field*@
+<SearchCriteria OnClickToSearch="DisplayResults"/>
+@*End novels search field*@
+
+@*Begin novel results*@
+<PartOfDisplaySearchResults/>
+@*End novel results*@
+
+@code{
+    //Stopwatch ElapsedTimeOfNull = new Stopwatch();
+}
