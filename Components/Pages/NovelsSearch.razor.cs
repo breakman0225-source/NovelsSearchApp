@@ -16,11 +16,13 @@ public partial class NovelsSearch : ComponentBase
 
     public IEnumerable<NovelModel>? novels;
 
-    public bool CheckNetworkSuccess {get; set; }
+    public bool IsGettingAPISuccess {get; set; }
+
+    public bool IsSearchbuttonpushed {get; set; } = false;
 
     protected async Task DisplayResults()//"Network error" is occurred because this method is exchanged for `OnInitializedAsync` method. I should refer to the chat with Gemini named "BlazorでのAPI連携と画面表示" 
     {
-        //Console.WriteLine("DisplayResults method is called.");
+        IsSearchbuttonpushed = true;
         try
         {
             var httpClient = HttpClientFactory.CreateClient("NarouAPI");
@@ -36,7 +38,7 @@ public partial class NovelsSearch : ComponentBase
                     novels = novelsList.Skip(1);
                 }
 
-                CheckNetworkSuccess = true;
+                IsGettingAPISuccess = true;
             }
             else
             {

@@ -7,11 +7,11 @@
 
 @*Begin novel results*@
 <div>
-    @if(CheckNetworkSuccessInChild)
+    @if(IsGettingAPISuccessInChild && IsSearchbuttonpushedInChild)
     {
         @if(NovelsInChild == null)
         {
-            <span>読み込み中です...</span>
+            <span>小説が取得できませんでした。再試行してください。</span>
         }
         @*I will add else if statement for no results later. I plan to make program that measures the time null is assigned to novels and if it exceeds certain time, it will display some messages.*@
         else
@@ -25,18 +25,26 @@
             }
         }
     }
+    else if(IsGettingAPISuccessInChild || IsSearchbuttonpushedInChild)
+    {
+        <span>読み込み中です...</span>
+    }
     else
     {
-        <span>ネットワーク接続に失敗しました。再試行してください。</span>
+        <span>検索ボタンを押してください。</span>
     }
 </div>
 @*End novel results*@
+@*I think above handle of wating to display searched results can be replaced with async handle.*@
 
     
 @code{
     [Parameter] 
-    public bool CheckNetworkSuccessInChild { get; set; }
+    public bool IsGettingAPISuccessInChild {get; set; }
     
     [Parameter]
-    public IEnumerable<NovelModel>?  NovelsInChild { get; set; }
+    public IEnumerable<NovelModel>?  NovelsInChild {get; set; }
+    
+    [Parameter]
+    public bool IsSearchbuttonpushedInChild {get; set;}
 }
