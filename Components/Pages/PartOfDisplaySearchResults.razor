@@ -7,16 +7,16 @@
 
 @*Begin novel results*@
 <div>
-    @if(novelsResult.CheckNetworkSuccess)
+    @if(CheckNetworkSuccessInChild)
     {
-        @if(novelsResult.novels == null)
+        @if(NovelsInChild == null)
         {
             <span>読み込み中です...</span>
         }
         @*I will add else if statement for no results later. I plan to make program that measures the time null is assigned to novels and if it exceeds certain time, it will display some messages.*@
         else
         {
-            @foreach(var novel in novelsResult.novels)
+            @foreach(var novel in NovelsInChild)
             {
                 <div>
                     <span>@novel.Title</span>
@@ -34,5 +34,9 @@
 
     
 @code{
-    NovelsSearch novelsResult = new NovelsSearch();
+    [Parameter] 
+    public bool CheckNetworkSuccessInChild { get; set; }
+    
+    [Parameter]
+    public IEnumerable<NovelModel>?  NovelsInChild { get; set; }
 }
