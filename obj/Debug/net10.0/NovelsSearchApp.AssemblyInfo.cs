@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NovelsSearchApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3633a52720c3bdc4cab6029aea92d30ed5731856")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9a07f346b90689607166ec9bc59faa1f4cff108b")]
 [assembly: System.Reflection.AssemblyProductAttribute("NovelsSearchApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NovelsSearchApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
