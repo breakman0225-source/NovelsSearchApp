@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Dev_Surface\\NovelsSearchApp\\NovelsSearchApp.csproj": {}
+    "C:\\Dev\\NovelsSearchApp\\NovelsSearchApp\\NovelsSearchApp.csproj": {}
   },
   "projects": {
-    "C:\\Dev_Surface\\NovelsSearchApp\\NovelsSearchApp.csproj": {
+    "C:\\Dev\\NovelsSearchApp\\NovelsSearchApp\\NovelsSearchApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Dev_Surface\\NovelsSearchApp\\NovelsSearchApp.csproj",
+        "projectUniqueName": "C:\\Dev\\NovelsSearchApp\\NovelsSearchApp\\NovelsSearchApp.csproj",
         "projectName": "NovelsSearchApp",
-        "projectPath": "C:\\Dev_Surface\\NovelsSearchApp\\NovelsSearchApp.csproj",
-        "packagesPath": "C:\\Users\\Kazuma Matsumoto\\.nuget\\packages\\",
-        "outputPath": "C:\\Dev_Surface\\NovelsSearchApp\\obj\\",
+        "projectPath": "C:\\Dev\\NovelsSearchApp\\NovelsSearchApp\\NovelsSearchApp.csproj",
+        "packagesPath": "C:\\Users\\break\\.nuget\\packages\\",
+        "outputPath": "C:\\Dev\\NovelsSearchApp\\NovelsSearchApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Kazuma Matsumoto\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\break\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -55,7 +56,7 @@
             "Microsoft.AspNetCore.App.Internal.Assets": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[10.0.9, )",
+              "version": "[10.0.8, )",
               "autoReferenced": true
             }
           },
@@ -78,7 +79,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

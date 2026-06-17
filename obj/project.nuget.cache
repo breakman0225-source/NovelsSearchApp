@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "mEb62FVuzYc=",
+  "dgSpecHash": "bgcnZKRPKec=",
   "success": true,
-  "projectFilePath": "C:\\Dev_Surface\\NovelsSearchApp\\NovelsSearchApp.csproj",
+  "projectFilePath": "C:\\Dev\\NovelsSearchApp\\NovelsSearchApp\\NovelsSearchApp.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Kazuma Matsumoto\\.nuget\\packages\\microsoft.aspnetcore.app.internal.assets\\10.0.9\\microsoft.aspnetcore.app.internal.assets.10.0.9.nupkg.sha512"
+    "C:\\Users\\break\\.nuget\\packages\\microsoft.aspnetcore.app.internal.assets\\10.0.8\\microsoft.aspnetcore.app.internal.assets.10.0.8.nupkg.sha512"
   ],
   "logs": []
 }
