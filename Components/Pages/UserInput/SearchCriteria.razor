@@ -1,5 +1,6 @@
 @using NovelsSearchApp.Components.Pages;
 @using NovelsSearchApp.NovelModels;
+
 @rendermode InteractiveServer
 
 @namespace NovelsSearchApp.Components.Pages.UserInput
@@ -14,17 +15,21 @@
     </div>
 
     <div>
-        <span>検索優先度高</span>
-        <input type="text"/>
-        <span>除外優先度高</span>
-        <input type="text"/>
+        <label>検索優先度高
+            <input type="text" @bind />
+        </label>
+        <label>除外優先度高
+            <input type="text" @bind/>
+        </label>
     </div>
 
     <div>
-        <span>検索優先度低</span>
-        <input type="text"/>
-        <span>除外優先度低</span>
-        <input type="text"/>
+        <label>検索優先度低
+            <input type="text" @bind/>
+        </label>
+        <label>除外優先度低
+            <input type="text"@bind/>
+        </label>
     </div>
 
     <div>

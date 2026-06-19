@@ -16,9 +16,9 @@ public partial class NovelsSearch : ComponentBase
 
     public IEnumerable<NovelModel>? novels;
 
-    public bool IsGettingAPISuccess {get; set; }
+    public bool IsGettingAPISuccess { get; set; }
 
-    public bool IsSearchbuttonpushed {get; set; } = false;
+    public bool IsSearchbuttonpushed { get; set; } = false;
 
     protected async Task DisplayResults()//"Network error" is occurred because this method is exchanged for `OnInitializedAsync` method. I should refer to the chat with Gemini named "BlazorでのAPI連携と画面表示" 
     {
