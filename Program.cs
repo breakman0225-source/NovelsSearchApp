@@ -1,4 +1,5 @@
 using NovelsSearchApp.Components;
+using NovelsSearchApp.Components.Pages.UserInput;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ builder.Services.AddHttpClient("NarouAPI", httpClient =>
     httpClient.DefaultRequestHeaders.Add("User-Agent", "NovelSearchApp/1.0");
 });
 //End of HTTP client code.
+
+builder.Services.AddScoped<SearchCriteria>();
 
 var app = builder.Build();
 

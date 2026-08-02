@@ -1,5 +1,5 @@
 @using NovelsSearchApp.Components.Pages;
-@using NovelsSearchApp.NovelModels;
+@using NovelsSearchApp.Models;
 
 @rendermode InteractiveServer
 
@@ -16,20 +16,20 @@
 
     <div>
         <label>検索優先度高
-            <input type="text" @bind />
+            <input type="text" @bind="NovelParameters.HighPriorityCriteria"/>
         </label>
         <label>除外優先度高
-            <input type="text" @bind/>
+            <input type="text" @bind="NovelParameters.Exceptword"/>
         </label>
     </div>
 
     <div>
         <label>検索優先度低
-            <input type="text" @bind/>
+            <input type="text" @bind="NovelParameters.LowPriorityCriteria"/>
         </label>
-        <label>除外優先度低
-            <input type="text"@bind/>
-        </label>
+        @*<label>除外優先度低
+            <input type="text"@bind="LowPriorityExcept"/>
+        </label>*@
     </div>
 
     <div>
@@ -38,6 +38,10 @@
 </div>
 @*End novel Search field*@
 
+@*Check connect of code-behind file.*@
+
+
 @code{
     [Parameter] public EventCallback OnClickToSearch { get; set; }
+    //CriteriaOfSearchingNovels behindcodeSearching = new CriteriaOfSearchingNovels();
 }

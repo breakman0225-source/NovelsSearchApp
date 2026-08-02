@@ -1,41 +1,45 @@
 @using NovelsSearchApp.Components.Pages;
 @using NovelsSearchApp.Components.Pages.UserInput;
-@using NovelsSearchApp.NovelModels;
+@using NovelsSearchApp.Models;
 @rendermode InteractiveServer
 
 @namespace NovelsSearchApp.Components.Pages
 
 @*Begin novel results*@
 <div>
-    @if(IsGettingAPISuccessInChild && IsSearchbuttonpushedInChild)
+    @if(IsGettingAPISuccessInChild && IsSearchbuttonpushedInChild)@*If getting API and button is pushed, display results of Searched novels.*@
     {
-        @if(NovelsInChild == null)
-        {
-            <span>小説が取得できませんでした。再試行してください。</span>
-        }
-        @*I will add else if statement for no results later. I plan to make program that measures the time null is assigned to novels and if it exceeds certain time, it will display some messages.*@
-        else
+        @if(NovelsInChild != null)
         {
             @foreach(var novel in NovelsInChild)
             {
                 <div>
-                    <span>@novel.Title</span>
-                    <span>@novel.Writer</span>            
+                    <p>@novel.Title</p>
+                    <p>@novel.Writer</p>
+                    <p>@novel.Story</p>
+                    <p>@novel.Genre</p>            
+                    <p>@novel.Keyword</p>
+                    <p>@novel.Global_point</p>
+                    <p>@novel.Novelupdated_at</p>
                 </div>
             }
         }
+        else
+        {
+            <p>小説が取得できませんでした。再試行してください。</p>
+        }
     }
-    else if(IsGettingAPISuccessInChild || IsSearchbuttonpushedInChild)
+    else if(IsGettingAPISuccessInChild || IsSearchbuttonpushedInChild)@*this is handle of displaying loading sentences.*@
     {
-        <span>読み込み中です...</span>
+        <p>読み込み中です...</p>
     }
+    @*I plan to add to the handle that if loading time exceed 15 minutes, display "読み込みに失敗しました。"*@
     else
     {
-        <span>検索ボタンを押してください。</span>
+        <p>検索ボタンを押してください。</p>
     }
 </div>
 @*End novel results*@
-@*I think above handle of wating to display searched results can be replaced with async handle.*@
 
     
 @code{

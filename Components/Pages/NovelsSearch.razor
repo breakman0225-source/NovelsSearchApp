@@ -1,11 +1,14 @@
 ﻿@page "/"
 @using System.Diagnostics;
-@using NovelsSearchApp;
+@using NovelsSearchApp.Models;
 @using NovelsSearchApp.Components.Pages;
 @using NovelsSearchApp.Components.Pages.UserInput;
 @rendermode InteractiveServer
 
 <PageTitle>なろう小説検索</PageTitle>
+
+<p>@CheckAPI</p>
+<p>@CheckHighPriorityCriteria</p>
 
 @*Begin novels search field*@
 <SearchCriteria OnClickToSearch="DisplayResults"/>
@@ -18,8 +21,3 @@ IsGettingAPISuccessInChild = "IsGettingAPISuccess"
 NovelsInChild = "novels"
 />
 @*End novel results*@
-
-@code{
-    //Stopwatch ElapsedTimeOfNull = new Stopwatch();
-    //github testing.
-}

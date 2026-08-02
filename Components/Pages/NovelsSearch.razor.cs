@@ -2,10 +2,12 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Components;
 using System.Net.Http;
-using NovelsSearchApp.NovelModels;
+using NovelsSearchApp.Models;
 using System.Net.Http.Json;
 using System.Linq;
 using System.Diagnostics;
+using NovelsSearchApp.Components.Pages.UserInput;
+using System.Security.Cryptography.X509Certificates;
 
 namespace NovelsSearchApp.Components.Pages;
 
@@ -20,15 +22,28 @@ public partial class NovelsSearch : ComponentBase
 
     public bool IsSearchbuttonpushed { get; set; } = false;
 
-    protected async Task DisplayResults()//"Network error" is occurred because this method is exchanged for `OnInitializedAsync` method. I should refer to the chat with Gemini named "BlazorでのAPI連携と画面表示" 
+    public string? CheckAPI { get; set; }
+
+    public string? CheckHighPriorityCriteria { get; set; }
+    SearchConditionModel CheckSearchCriteria = new SearchConditionModel();
+    
+    [Inject]
+    public SearchCriteria ChangeGetParamForAPI { get; set; } = default!;
+
+    protected async Task DisplayResults()
     {
         IsSearchbuttonpushed = true;
+
         try
         {
+            //This is handle of getting narou API.
             var httpClient = HttpClientFactory.CreateClient("NarouAPI");
-            using HttpResponseMessage response = await httpClient.GetAsync("novelapi/api/?out=json&lim=10&order=hyoka&of=t-w");//This arugment is for testing.
+            using HttpResponseMessage response = await httpClient.GetAsync(ChangeGetParamForAPI.ChangeQueryString());//Handle the return of `ChaneQueryString`.
 
-            //If network can be connected but API return eroor, this IF statement will catch it.
+            //`CheckAPI` is used for check the contents of URL which get the information of novels by query parameters.
+            CheckAPI = ChangeGetParamForAPI.ChangeQueryString();
+
+            //If network can be connected but API return erorr, this IF statement will catch it.
             if(response.IsSuccessStatusCode)
             {
                 using var responseStream = await response.Content.ReadAsStreamAsync();
@@ -44,6 +59,15 @@ public partial class NovelsSearch : ComponentBase
             {
                 //Handle the error case.
                 Console.WriteLine($"APIからエラーが返されました。 StatusCode: {response.StatusCode}");
+            }
+
+            if (string.IsNullOrWhiteSpace(CheckSearchCriteria.HighPriorityCriteria))
+            {
+                CheckHighPriorityCriteria = "There are no contents in `HighPriorityCriteria`";
+            }
+            else
+            {
+                CheckHighPriorityCriteria = CheckSearchCriteria.HighPriorityCriteria;
             }
 
         //Write handle code for exclude null value which exist in first element of novels by using LINQ.
@@ -66,6 +90,4 @@ public partial class NovelsSearch : ComponentBase
         }
 
     }
-
-    //OnResearch = "@DisplaySearchResults";
 }
