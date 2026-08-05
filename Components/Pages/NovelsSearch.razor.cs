@@ -27,8 +27,7 @@ public partial class NovelsSearch : ComponentBase
     public string? CheckHighPriorityCriteria { get; set; }
     SearchConditionModel CheckSearchCriteria = new SearchConditionModel();
 
-    [Inject]
-    protected SearchCriteria ChangeGetParamForAPI { get; set; } = default!;
+    protected SearchCriteria ChangeGetParamForAPI = default!;
 
     public async Task DisplayResults()
     {
@@ -60,17 +59,7 @@ public partial class NovelsSearch : ComponentBase
                 //Handle the error case.
                 Console.WriteLine($"APIからエラーが返されました。 StatusCode: {response.StatusCode}");
             }
-
-            //This if statement is intend to check the contents of `HighPriorityCriteria`, which is used for acceptting criteria inputed by user.
-            if (string.IsNullOrWhiteSpace(CheckSearchCriteria.HighPriorityCriteria))
-            {
-                CheckHighPriorityCriteria = "There are no contents in `HighPriorityCriteria`";
-            }
-            else
-            {
-                CheckHighPriorityCriteria = CheckSearchCriteria.HighPriorityCriteria;
-            }
-
+            
         //Write handle code for exclude null value which exist in first element of novels by using LINQ.
         }
         catch(HttpRequestException ex)

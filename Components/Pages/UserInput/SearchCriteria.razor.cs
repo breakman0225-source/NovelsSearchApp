@@ -21,10 +21,15 @@ public partial class SearchCriteria
 
         var queryParamOfHP = SearchConditionDict.AddToDictionary(NovelParameters);
 
+        //This code is used for breakpoint debug.
+        var queryParamOfHPForDebug = queryParamOfHP;
+
         QueryStringForGetAsync = QueryHelpers.AddQueryString(narouUri, queryParamOfHP);
         return QueryStringForGetAsync;//This property is set in GetAsync in `NovelsSearch.razor.cs`.
     }
 
+    // `NovelParameters.HighPriorityCriteria` has stirng which is entered in input tag.
+    //So, cause of the error is 
     public string CheckUserInput()
     {
         if (!string.IsNullOrWhiteSpace(NovelParameters.HighPriorityCriteria))

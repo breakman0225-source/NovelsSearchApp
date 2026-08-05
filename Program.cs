@@ -17,8 +17,6 @@ builder.Services.AddHttpClient("NarouAPI", httpClient =>
 });
 //End of HTTP client code.
 
-builder.Services.AddScoped<SearchCriteria>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

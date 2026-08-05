@@ -21,14 +21,19 @@ public class SearchConditionDict
         {
             keywordOfSearch.Add("word", parameters.HighPriorityCriteria);
         }
+        else
+        {
+            keywordOfSearch.Add("word", "This is Error message.");
+        }
 
         if (!string.IsNullOrWhiteSpace(parameters.Exceptword))
         {
             keywordOfSearch.Add("notword", parameters.Exceptword);
         }
-
-        Debug.WriteLine($"{parameters.HighPriorityCriteria}");
-        
+        else
+        {
+            keywordOfSearch.Add("notword", "This is Error message.");
+        }        
         return keywordOfSearch;
     }
 
