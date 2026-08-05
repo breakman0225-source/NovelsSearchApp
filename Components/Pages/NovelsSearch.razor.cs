@@ -26,11 +26,11 @@ public partial class NovelsSearch : ComponentBase
 
     public string? CheckHighPriorityCriteria { get; set; }
     SearchConditionModel CheckSearchCriteria = new SearchConditionModel();
-    
-    [Inject]
-    public SearchCriteria ChangeGetParamForAPI { get; set; } = default!;
 
-    protected async Task DisplayResults()
+    [Inject]
+    protected SearchCriteria ChangeGetParamForAPI { get; set; } = default!;
+
+    public async Task DisplayResults()
     {
         IsSearchbuttonpushed = true;
 
@@ -61,6 +61,7 @@ public partial class NovelsSearch : ComponentBase
                 Console.WriteLine($"APIからエラーが返されました。 StatusCode: {response.StatusCode}");
             }
 
+            //This if statement is intend to check the contents of `HighPriorityCriteria`, which is used for acceptting criteria inputed by user.
             if (string.IsNullOrWhiteSpace(CheckSearchCriteria.HighPriorityCriteria))
             {
                 CheckHighPriorityCriteria = "There are no contents in `HighPriorityCriteria`";

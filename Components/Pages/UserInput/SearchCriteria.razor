@@ -1,5 +1,6 @@
 @using NovelsSearchApp.Components.Pages;
 @using NovelsSearchApp.Models;
+@using System.ComponentModel.DataAnnotations;
 
 @rendermode InteractiveServer
 
@@ -7,35 +8,37 @@
 
 @*Begin novel Search field.*@
 <h2>小説検索</h2>
-
-<div>
+<p>@CheckUserInput()</p>
+<EditForm Model="NovelParameters" OnValidSubmit="OnClickToSearch">
     <div>
-        <span>検索条件</span>
-        <span>除外条件</span>
-    </div>
+        <div>
+            <span>検索条件</span>
+            <span>除外条件</span>
+        </div>
 
-    <div>
-        <label>検索優先度高
-            <input type="text" @bind="NovelParameters.HighPriorityCriteria"/>
-        </label>
-        <label>除外優先度高
-            <input type="text" @bind="NovelParameters.Exceptword"/>
-        </label>
-    </div>
+        <div>
+            <label>検索優先度高
+                <input type="text" @bind="NovelParameters.HighPriorityCriteria"/>
+            </label>
+            <label>除外優先度高
+                <input type="text" @bind="NovelParameters.Exceptword"/>
+            </label>
+        </div>
 
-    <div>
-        <label>検索優先度低
-            <input type="text" @bind="NovelParameters.LowPriorityCriteria"/>
-        </label>
-        @*<label>除外優先度低
-            <input type="text"@bind="LowPriorityExcept"/>
-        </label>*@
-    </div>
+        <div>
+            <label>検索優先度低
+                <input type="text" @bind="NovelParameters.LowPriorityCriteria"/>
+            </label>
+            @*<label>除外優先度低
+                <input type="text"@bind="LowPriorityExcept"/>
+            </label>*@
+        </div>
 
-    <div>
-        <button type="submit" @onclick="OnClickToSearch">検索</button>
+        <div>
+            <button type="submit">検索</button>
+        </div>
     </div>
-</div>
+</EditForm>
 @*End novel Search field*@
 
 @*Check connect of code-behind file.*@

@@ -1,4 +1,5 @@
 //This area is used for using directive.
+using System.Diagnostics;
 using Microsoft.AspNetCore.Components;
 using NovelsSearchApp.Models;
 
@@ -16,16 +17,17 @@ public class SearchConditionDict
             // "title, wirter, abstract, genre, keyword, global_point, novelupdated_at, and ncode which is " is oututed.
         };
 
-
-        //Why `string` is written in front of `IsNullOrWhiteSpace` method? Is this need for logic?
         if (!string.IsNullOrWhiteSpace(parameters.HighPriorityCriteria))
         {
             keywordOfSearch.Add("word", parameters.HighPriorityCriteria);
         }
+
         if (!string.IsNullOrWhiteSpace(parameters.Exceptword))
         {
             keywordOfSearch.Add("notword", parameters.Exceptword);
         }
+
+        Debug.WriteLine($"{parameters.HighPriorityCriteria}");
         
         return keywordOfSearch;
     }
