@@ -7,5 +7,7 @@ public class SearchConditionModel
     public string? HighPriorityCriteria { get; set; }  = default!;
     public string? LowPriorityCriteria { get; set; } = default!;
     public string? Exceptword { get; set; } = default!;
+    
+    public string OrderSelect { get; set; } = "new";
 
 }

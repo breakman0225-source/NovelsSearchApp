@@ -8,7 +8,6 @@
 
 @*Begin novel Search field.*@
 <h2>小説検索</h2>
-<p>@CheckUserInput()</p>
 <EditForm Model="NovelParameters" OnValidSubmit="OnClickToSearch">
     <div>
         <div>
@@ -34,17 +33,34 @@
             </label>*@
         </div>
 
+        <label>並び替え</label>
+        <select name="order" @bind="NovelParameters.OrderSelect" @bind:after="HandleOrderChangedAsync">
+            <option value="new" selected>新着更新順</option>
+            <option value="favnovelcnt">ブックマーク数の多い順</option>
+            <option value="reviewcnt">レビュー数の多い順</option>
+            <option value="hyoka">総合ポイントの高い順</option>
+            <option value="dailypoint">日間ポイントの高い順</option>
+            <option value="weeklypoint">週間ポイントの高い順</option>
+            <option value="monthlypoint">月間ポイントの高い順</option>
+            <option value="quarterpoint">四半期ポイントの高い順</option>
+            <option value="yearlypoint">年間ポイントの高い順</option>
+            <option value="impressioncnt">感想の多い順</option>
+            <option value="hyokacnt">評価者の多い順</option>
+            <option value="weekly">週間ユニークアクセスが多い順</option>
+        </select>
+@*End novel Search field*@
         <div>
             <button type="submit">検索</button>
         </div>
     </div>
 </EditForm>
-@*End novel Search field*@
 
 @*Check connect of code-behind file.*@
 
 
 @code{
     [Parameter] public EventCallback OnClickToSearch { get; set; }
+
+    [Parameter] public EventCallback OnOrderChanged{ get; set; }
     //CriteriaOfSearchingNovels behindcodeSearching = new CriteriaOfSearchingNovels();
 }

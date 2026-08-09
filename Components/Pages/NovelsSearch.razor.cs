@@ -25,7 +25,6 @@ public partial class NovelsSearch : ComponentBase
     public string? CheckAPI { get; set; }
 
     public string? CheckHighPriorityCriteria { get; set; }
-    SearchConditionModel CheckSearchCriteria = new SearchConditionModel();
 
     protected SearchCriteria ChangeGetParamForAPI = default!;
 
