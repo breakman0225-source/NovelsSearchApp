@@ -38,6 +38,11 @@ public class SearchConditionDict
             dictionaryForAddingKeyword.keywordOfSearch.Add("order", parameters.OrderSelect);
         }
 
+        if (!string.IsNullOrWhiteSpace(parameters.LimSelect))
+        {
+            dictionaryForAddingKeyword.keywordOfSearch.Add("lim", parameters.LimSelect);
+        }
+
         return dictionaryForAddingKeyword.keywordOfSearch;
     }
 

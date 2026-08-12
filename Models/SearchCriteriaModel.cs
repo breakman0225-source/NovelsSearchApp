@@ -4,10 +4,11 @@ namespace NovelsSearchApp.Models;
 
 public class SearchConditionModel
 {
+    //Properties for search criteria.
     public string? HighPriorityCriteria { get; set; }  = default!;
     public string? LowPriorityCriteria { get; set; } = default!;
     public string? Exceptword { get; set; } = default!;
-    
-    public string OrderSelect { get; set; } = "new";
-
+    //Properties for Displaying novels option.
+    public string OrderSelect { get; set; } = default!;
+    public string LimSelect { get; set; } = default!;
 }

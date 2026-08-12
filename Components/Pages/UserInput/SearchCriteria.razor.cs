@@ -26,11 +26,11 @@ public partial class SearchCriteria
         return QueryStringForGetAsync;//This property is set in GetAsync in `NovelsSearch.razor.cs`.
     }
 
-    private async Task HandleOrderChangedAsync()
+    private async Task HandleParamChangedAsync()
     {
-        if (OnOrderChanged.HasDelegate)//This If statement checks whether `OnOrderChanged` event which is stated in `NovelsSearch.razor(parent component)` has method.
+        if (OnParamChanged.HasDelegate)//This If statement checks whether `OnOrderChanged` event which is stated in `NovelsSearch.razor(parent component)` has method.
         {
-            await OnOrderChanged.InvokeAsync();//This code has the handle which execute method delegated by parent component in this case `NovelsSearch.razor`.
+            await OnParamChanged.InvokeAsync();//This code has the handle which execute method delegated by parent component in this case `NovelsSearch.razor`.
             //`await` is needed because delegated method `DisplayResults` has the function to get API, with network communication.
         }
     }

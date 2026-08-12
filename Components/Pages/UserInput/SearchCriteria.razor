@@ -9,6 +9,7 @@
 @*Begin novel Search field.*@
 <h2>小説検索</h2>
 <EditForm Model="NovelParameters" OnValidSubmit="OnClickToSearch">
+@*Begin search criteria input section*@
     <div>
         <div>
             <span>検索条件</span>
@@ -32,9 +33,12 @@
                 <input type="text"@bind="LowPriorityExcept"/>
             </label>*@
         </div>
+@*End search criteria input section*@
 
+@*Begin order change section*@
+    <div>
         <label>並び替え</label>
-        <select name="order" @bind="NovelParameters.OrderSelect" @bind:after="HandleOrderChangedAsync">
+        <select name="order" @bind="NovelParameters.OrderSelect" @bind:after="HandleParamChangedAsync">
             <option value="new" selected>新着更新順</option>
             <option value="favnovelcnt">ブックマーク数の多い順</option>
             <option value="reviewcnt">レビュー数の多い順</option>
@@ -48,6 +52,22 @@
             <option value="hyokacnt">評価者の多い順</option>
             <option value="weekly">週間ユニークアクセスが多い順</option>
         </select>
+    </div>
+@*End order change section*@
+
+@*Begin change the number of displaying novels section*@
+    <div>
+        <label>検索結果表示数変更</label>
+        <select name="limNumber" @bind="NovelParameters.LimSelect" @bind:after="HandleParamChangedAsync">
+            <option value="10">10</option>
+            <option value="20" selected>20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+            <option value="50">50</option>
+        </select>
+    </div>
+@*End change the number of displaying novels section*@
+
 @*End novel Search field*@
         <div>
             <button type="submit">検索</button>
@@ -61,6 +81,6 @@
 @code{
     [Parameter] public EventCallback OnClickToSearch { get; set; }
 
-    [Parameter] public EventCallback OnOrderChanged{ get; set; }
+    [Parameter] public EventCallback OnParamChanged{ get; set; }
     //CriteriaOfSearchingNovels behindcodeSearching = new CriteriaOfSearchingNovels();
 }
