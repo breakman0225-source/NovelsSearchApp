@@ -1,9 +1,32 @@
+@using Microsoft.VisualBasic
 @using NovelsSearchApp.Components.Pages;
 @using NovelsSearchApp.Components.Pages.UserInput;
-@using NovelsSearchApp.Models;
+@using NovelsSearchApp.Models
 @rendermode InteractiveServer
 
 @namespace NovelsSearchApp.Components.Pages
+
+@*Begin the number of pages of novels in upper area.*@
+@*<div>
+    <ul>
+        @foreach(var pageNumber in TheNumberOfPages)
+        {
+            @if(pageNumber == NovelParameters.CurrentPageNumber)
+            {
+                <strong>pageNumber</strong>
+            }
+            else if(pageNumber > NovelParameters.CurrentPageNumber + 5)
+            {
+                break;
+            }
+            else if(pageNumber < NovelParameters.CurrentPageNumber - 5)
+            {
+                
+            }
+        }
+    </ul>
+</div>*@
+@*End the number of pages of novels in upper area.*@
 
 @*Begin novel results*@
 <div>
@@ -11,6 +34,11 @@
     {
         @if(NovelsInChild != null)
         {
+            @foreach(var displayedPages in MakeDisplayPages())
+            {
+                <span>@displayedPages</span>
+            }
+
             @foreach(var novel in NovelsInChild)
             {
                 <div>
@@ -41,14 +69,24 @@
 </div>
 @*End novel results*@
 
+@*Begin the number of pages of novels in lower area.*@
+@*End the number of pages of novels in lower area.*@
     
 @code{
+    //This is Parameter zone.
     [Parameter] 
-    public bool IsGettingAPISuccessInChild {get; set; }
+    public bool IsGettingAPISuccessInChild { get; set; }
     
     [Parameter]
-    public IEnumerable<NovelModel>?  NovelsInChild {get; set; }
+    public IEnumerable<NovelModel>?  NovelsInChild { get; set; }
     
     [Parameter]
-    public bool IsSearchbuttonpushedInChild {get; set;}
+    public bool IsSearchbuttonpushedInChild { get; set;}
+
+    [Parameter]
+    public int GetAllcountForPageNumber { get; set; }
+
+    [Parameter]
+    public SearchConditionModel NovelParametersForPageCount { get; set; } = default!;
+    //This is instance zone.
 }

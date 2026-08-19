@@ -7,10 +7,6 @@
 
 <PageTitle>なろう小説検索</PageTitle>
 
-<p>@CheckAPI</p>
-<p>@CheckHighPriorityCriteria</p>
-
-
 @*Begin novels search field*@
 <SearchCriteria @ref="ChangeGetParamForAPI" OnClickToSearch="DisplayResults" OnParamChanged="DisplayResults"/>
 @*End novels search field*@
@@ -19,6 +15,8 @@
 <PartOfDisplaySearchResults
 IsSearchbuttonpushedInChild = "IsSearchbuttonpushed"
 IsGettingAPISuccessInChild = "IsGettingAPISuccess"
+NovelParametersForPageCount = "ChangeGetParamForAPI?.NovelParameters"
+GetAllcountForPageNumber = "AllCountForPageNumber"
 NovelsInChild = "novels"
 />
 @*End novel results*@

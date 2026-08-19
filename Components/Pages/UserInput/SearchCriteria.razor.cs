@@ -10,8 +10,6 @@ namespace NovelsSearchApp.Components.Pages.UserInput;
 
 public partial class SearchCriteria
 {
-    //public NovelsSearch onOrderChange = new NovelsSearch();
-
     public SearchConditionModel NovelParameters {get; set; }= new SearchConditionModel();
     public required string QueryStringForGetAsync { get; set; }//Why "required" modifier is needed?=If this property has no contents, this application can't function.
     

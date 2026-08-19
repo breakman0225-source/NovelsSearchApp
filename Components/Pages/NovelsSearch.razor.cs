@@ -8,6 +8,7 @@ using System.Linq;
 using System.Diagnostics;
 using NovelsSearchApp.Components.Pages.UserInput;
 using System.Security.Cryptography.X509Certificates;
+using System.Collections.Immutable;
 
 namespace NovelsSearchApp.Components.Pages;
 
@@ -24,9 +25,10 @@ public partial class NovelsSearch : ComponentBase
 
     public string? CheckAPI { get; set; }
 
-    public string? CheckHighPriorityCriteria { get; set; }
+    protected SearchCriteria ChangeGetParamForAPI { get; set; } = default!;
+    
+    public int AllCountForPageNumber { get; set; } = default!;
 
-    protected SearchCriteria ChangeGetParamForAPI = default!;
 
     public async Task DisplayResults()
     {
@@ -46,8 +48,16 @@ public partial class NovelsSearch : ComponentBase
             {
                 using var responseStream = await response.Content.ReadAsStreamAsync();
                 IEnumerable<NovelModel>? novelsList = await JsonSerializer.DeserializeAsync<IEnumerable<NovelModel>>(responseStream);
-                if(novelsList != null)
+                if(novelsList != null && novelsList.Any())
                 {
+                    //Get allcount to calculate the number of all pages.
+                    var allcount = novelsList.FirstOrDefault();
+                    if(allcount != null)
+                    {
+                        AllCountForPageNumber = allcount.AllCount;//why does this code have no error?
+                    }
+
+                    //`novels` is the List for displaying on UI. First index in `novelsList` is allcount, so this isn't necessary.
                     novels = novelsList.Skip(1);
                 }
 
