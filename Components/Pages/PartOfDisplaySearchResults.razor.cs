@@ -65,4 +65,17 @@ public partial class PartOfDisplaySearchResults
         
         return displayPages;
     }
+
+//@onclick="@(e => NovelParametersForPageCount.CurrentPageNumber = displayedPages)"
+    private async Task HandlePagenationAsync(int pageNumber)
+    {
+        NovelParametersForPageCount.CurrentPageNumber = pageNumber;
+
+        if (OnPagenationParam.HasDelegate)
+        {
+            await OnPagenationParam.InvokeAsync();
+            //`await` is needed because delegated method `DisplayResults` has the function to get API, with network communication.
+
+        }
+    }
 }

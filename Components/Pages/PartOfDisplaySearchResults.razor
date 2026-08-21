@@ -36,7 +36,14 @@
         {
             @foreach(var displayedPages in MakeDisplayPages())
             {
-                <span>@displayedPages</span>
+                @if(displayedPages == NovelParametersForPageCount.CurrentPageNumber)
+                {
+                    <strong>@displayedPages</strong>
+                }
+                else
+                {
+                    <button  @onclick="() => HandlePagenationAsync(displayedPages)">@displayedPages</button>
+                }
             }
 
             @foreach(var novel in NovelsInChild)
@@ -88,5 +95,8 @@
 
     [Parameter]
     public SearchConditionModel NovelParametersForPageCount { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback OnPagenationParam { get; set; }
     //This is instance zone.
 }
