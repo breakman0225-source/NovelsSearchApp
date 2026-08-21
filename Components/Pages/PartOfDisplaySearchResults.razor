@@ -6,27 +6,6 @@
 
 @namespace NovelsSearchApp.Components.Pages
 
-@*Begin the number of pages of novels in upper area.*@
-@*<div>
-    <ul>
-        @foreach(var pageNumber in TheNumberOfPages)
-        {
-            @if(pageNumber == NovelParameters.CurrentPageNumber)
-            {
-                <strong>pageNumber</strong>
-            }
-            else if(pageNumber > NovelParameters.CurrentPageNumber + 5)
-            {
-                break;
-            }
-            else if(pageNumber < NovelParameters.CurrentPageNumber - 5)
-            {
-                
-            }
-        }
-    </ul>
-</div>*@
-@*End the number of pages of novels in upper area.*@
 
 @*Begin novel results*@
 <div>
@@ -34,6 +13,7 @@
     {
         @if(NovelsInChild != null)
         {
+            <div>@ToCheckQueryParam</div>
             @foreach(var displayedPages in MakeDisplayPages())
             {
                 @if(displayedPages == NovelParametersForPageCount.CurrentPageNumber)
@@ -57,6 +37,18 @@
                     <p>@novel.Global_point</p>
                     <p>@novel.Novelupdated_at</p>
                 </div>
+            }
+
+            @foreach(var displayedPages in MakeDisplayPages())
+            {
+                @if(displayedPages == NovelParametersForPageCount.CurrentPageNumber)
+                {
+                    <strong>@displayedPages</strong>
+                }
+                else
+                {
+                    <button  @onclick="() => HandlePagenationAsync(displayedPages)">@displayedPages</button>
+                }
             }
         }
         else
@@ -98,5 +90,8 @@
 
     [Parameter]
     public EventCallback OnPagenationParam { get; set; }
+
+    [Parameter]
+    public string? ToCheckQueryParam { get; set; }
     //This is instance zone.
 }
