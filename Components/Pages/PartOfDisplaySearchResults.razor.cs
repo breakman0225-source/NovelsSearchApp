@@ -12,6 +12,7 @@ public partial class PartOfDisplaySearchResults
     private List<int> allPageNumber = new();
     private List<int> displayPages = new();
     //private List<int> displayPagesForUI = new();
+    private string? _pagenationMethodCheck;
 
     private int CalculateAllPages()
     {
@@ -38,6 +39,11 @@ public partial class PartOfDisplaySearchResults
             allPageNumber.Clear();
         }
 
+        if(allPages % int.Parse(NovelParametersForPageCount.LimSelect) != 0)
+        {
+            allPages += 1;
+        }
+        
         for(int i=1; i<=allPages; i++)
         {
             allPageNumber.Add(i);
@@ -66,7 +72,6 @@ public partial class PartOfDisplaySearchResults
         return displayPages;
     }
 
-//@onclick="@(e => NovelParametersForPageCount.CurrentPageNumber = displayedPages)"
     private async Task HandlePagenationAsync(int pageNumber)
     {
         NovelParametersForPageCount.CurrentPageNumber = pageNumber;
@@ -75,7 +80,16 @@ public partial class PartOfDisplaySearchResults
         {
             await OnPagenationParam.InvokeAsync();
             //`await` is needed because delegated method `DisplayResults` has the function to get API, with network communication.
-
+            _pagenationMethodCheck = "The method is invoked.";
         }
     }
+
+    private string GetNovelURL(string ncode)
+    {
+        var baseUriForNcode = "https://ncode.syosetu.com/";
+        var novelURL = baseUriForNcode + $"{ncode.ToLower()}/";
+
+        return novelURL;
+    }
+
 }

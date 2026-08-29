@@ -29,6 +29,10 @@ public class NovelModel
     [JsonPropertyName("keyword")]
     public string? Keyword { get; set; }
 
+    [Display(Name = "話数")]
+    [JsonPropertyName("general_all_no")]
+    public int General_all_no { get; set; }
+
     [Display(Name = "総合評価ポイント")]
     [JsonPropertyName("global_point")]
     public int Global_point { get; set; }
@@ -40,6 +44,6 @@ public class NovelModel
     //Begin Property used to develop website. The below property is not displayed on browser
     [Display(Name = "ncode")]
     [JsonPropertyName("ncode")]
-    public string? Ncode { get; set; }
+    public string Ncode { get; set; } = default!;
     //End Property used to develop website.
 }

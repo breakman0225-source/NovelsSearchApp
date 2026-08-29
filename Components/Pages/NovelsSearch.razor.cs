@@ -24,6 +24,7 @@ public partial class NovelsSearch : ComponentBase
     public bool IsSearchbuttonpushed { get; set; } = false;
 
     public string? CheckAPI { get; set; }
+    public int CheckDisplaytimes { get; set; }
 
     protected SearchCriteria ChangeGetParamForAPI { get; set; } = default!;
     
@@ -36,6 +37,7 @@ public partial class NovelsSearch : ComponentBase
 
         try
         {
+            Console.WriteLine("`Displayresults`method is invoked.");
             //This is handle of getting narou API.
             var httpClient = HttpClientFactory.CreateClient("NarouAPI");
             using HttpResponseMessage response = await httpClient.GetAsync(ChangeGetParamForAPI.ChangeQueryString());//Handle the return of `ChaneQueryString`.
@@ -46,6 +48,9 @@ public partial class NovelsSearch : ComponentBase
             //If network can be connected but API return erorr, this IF statement will catch it.
             if(response.IsSuccessStatusCode)
             {
+                IsGettingAPISuccess = true;
+                CheckDisplaytimes += 1;
+
                 using var responseStream = await response.Content.ReadAsStreamAsync();
                 IEnumerable<NovelModel>? novelsList = await JsonSerializer.DeserializeAsync<IEnumerable<NovelModel>>(responseStream);
                 if(novelsList != null && novelsList.Any())
@@ -60,8 +65,6 @@ public partial class NovelsSearch : ComponentBase
                     //`novels` is the List for displaying on UI. First index in `novelsList` is allcount, so this isn't necessary.
                     novels = novelsList.Skip(1);
                 }
-
-                IsGettingAPISuccess = true;
             }
             else
             {

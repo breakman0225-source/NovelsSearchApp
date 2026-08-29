@@ -13,7 +13,7 @@ public class SearchConditionDict
     public Dictionary<string, string?> keywordOfSearch = new Dictionary<string, string?>
         {
             {"out", "json"},
-            {"of", "t-n-w-s-g-k-gp-nu"}
+            {"of", "t-n-w-s-g-k-ga-gp-nu"}
             //This "of" parameter specify output items. in this case, 
             // "title, wirter, abstract, genre, keyword, global_point, novelupdated_at, and ncode which is " is oututed.
         };
@@ -43,7 +43,7 @@ public class SearchConditionDict
             dictionaryForAddingKeyword.keywordOfSearch.Add("lim", parameters.LimSelect);
         }
 
-        if(parameters.CurrentPageNumber != 1)
+        if(parameters.CurrentPageNumber != 1 && parameters.CurrentPageNumber <= 2000)
         {
             var stForPagenate = (parameters.CurrentPageNumber - 1) * int.Parse(parameters.LimSelect) + 1;
             dictionaryForAddingKeyword.keywordOfSearch.Add("st", stForPagenate.ToString());
