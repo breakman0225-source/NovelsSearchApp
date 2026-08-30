@@ -30,6 +30,8 @@ public partial class NovelsSearch : ComponentBase
     
     public int AllCountForPageNumber { get; set; } = default!;
 
+    public bool IsApiError { get; set; } = false;
+
 
     public async Task DisplayResults()
     {
@@ -45,50 +47,59 @@ public partial class NovelsSearch : ComponentBase
             //`CheckAPI` is used for check the contents of URL which get the information of novels by query parameters.
             CheckAPI = ChangeGetParamForAPI.ChangeQueryString();
 
-            //If network can be connected but API return erorr, this IF statement will catch it.
-            if(response.IsSuccessStatusCode)
-            {
-                IsGettingAPISuccess = true;
-                CheckDisplaytimes += 1;
-
-                using var responseStream = await response.Content.ReadAsStreamAsync();
-                IEnumerable<NovelModel>? novelsList = await JsonSerializer.DeserializeAsync<IEnumerable<NovelModel>>(responseStream);
-                if(novelsList != null && novelsList.Any())
-                {
-                    //Get allcount to calculate the number of all pages.
-                    var allcount = novelsList.FirstOrDefault();
-                    if(allcount != null)
-                    {
-                        AllCountForPageNumber = allcount.AllCount;//why does this code have no error?
-                    }
-
-                    //`novels` is the List for displaying on UI. First index in `novelsList` is allcount, so this isn't necessary.
-                    novels = novelsList.Skip(1);
-                }
-            }
-            else
-            {
-                //Handle the error case.
-                Console.WriteLine($"APIからエラーが返されました。 StatusCode: {response.StatusCode}");
-            }
+            //`EnsureSuccessStatusCode`checks whether the status code returned by API is in 200 range.
+            //If the status code is not in 200 range, it immediately throws an `HttpRequestException`.
+            response.EnsureSuccessStatusCode();            
             
-        //Write handle code for exclude null value which exist in first element of novels by using LINQ.
+            //`IsGetteingAPISuccess`is used for debug.
+            IsGettingAPISuccess = true;
+            CheckDisplaytimes += 1;
+
+            using var responseStream = await response.Content.ReadAsStreamAsync();
+            IEnumerable<NovelModel>? novelsList = await JsonSerializer.DeserializeAsync<IEnumerable<NovelModel>>(responseStream);
+            if(novelsList != null && novelsList.Any())
+            {
+                //Get allcount to calculate the number of all pages.
+                var allcount = novelsList.FirstOrDefault();
+                if(allcount != null)
+                {
+                    AllCountForPageNumber = allcount.AllCount;//why does this code have no error?
+                }
+
+                //`novels` is the List for displaying on UI. First index in `novelsList` is allcount, so this isn't necessary.
+                novels = novelsList.Skip(1);
+            }
+
         }
         catch(HttpRequestException ex)
         {
             Console.WriteLine($"ネットワークエラーが発生しました。{ex.Message}");
+            IsApiError = true;
+            StateHasChanged();
         }
         catch(TaskCanceledException ex)
         {
             Console.WriteLine($"通信がタイムアウトしました。{ex.Message}");
+            IsApiError = true;
+            StateHasChanged();
         }
         catch(JsonException ex)
         {
             Console.WriteLine($"JSONのデシリアライズに失敗しました。{ex.Message}");
+            IsApiError = true;
+            StateHasChanged();
+        }
+        catch(ArgumentException ex)
+        {
+            Console.WriteLine($"Dictionaryの同じkeyに複数のvalueが存在しています。{ex.Message}");
+            IsApiError = true;
+            StateHasChanged();
         }
         catch(Exception ex)
         {
             Console.WriteLine($"予期しないエラーが発生しました。{ex.Message}");
+            IsApiError = true;
+            StateHasChanged();
         }
 
     }

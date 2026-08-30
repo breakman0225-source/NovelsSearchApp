@@ -25,8 +25,17 @@ public class SearchConditionDict
         //This is the handle which specifies output of novels. `word` is specifies element of novels to be generated. `notword` is specifies element os novels to be not generated.
         if(!string.IsNullOrWhiteSpace(parameters.HighPriorityCriteria))
         {
-            dictionaryForAddingKeyword.keywordOfSearch.Add("word", parameters.HighPriorityCriteria);
+            if(!string.IsNullOrWhiteSpace(parameters.LowPriorityCriteria))
+            {
+                dictionaryForAddingKeyword.keywordOfSearch.Add("word", parameters.LowPriorityCriteria + parameters.HighPriorityCriteria);
+            }
+            else
+            {
+                dictionaryForAddingKeyword.keywordOfSearch.Add("word", parameters.HighPriorityCriteria);   
+            }
         }
+
+        
 
         if(!string.IsNullOrWhiteSpace(parameters.Exceptword))
         {
@@ -51,18 +60,4 @@ public class SearchConditionDict
 
         return dictionaryForAddingKeyword.keywordOfSearch;
     }
-
-    /*public static Dictionary<string, string?> OnSortOrderChanged()
-    {
-        var dictionaryForChangeOrder = new SearchConditionDict();
-        var ModelsForChangeOrder = new SearchConditionModel();
-
-        if (!string.IsNullOrWhiteSpace(ModelsForChangeOrder.OrderSelect))
-        {
-            dictionaryForChangeOrder.keywordOfSearch.Add("order", ModelsForChangeOrder.OrderSelect);
-        }
-        
-        return dictionaryForChangeOrder.keywordOfSearch;
-    }*/
-
 }

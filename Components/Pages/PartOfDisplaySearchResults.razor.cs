@@ -1,5 +1,6 @@
 //Those line is used for using directive.
 using System.Runtime.CompilerServices;
+using System.Security.Principal;
 using NovelsSearchApp.Components.Pages.UserInput;
 using NovelsSearchApp.Models;
 
@@ -15,17 +16,18 @@ public partial class PartOfDisplaySearchResults
     private string? _pagenationMethodCheck;
 
     private int CalculateAllPages()
-    {
-        if(NovelParametersForPageCount.LimSelect != null)
+    { 
+        if(GetAllcountForPageNumber % int.Parse(NovelParametersForPageCount.LimSelect) != 0)
         {
             TheNumberOfAllPages = GetAllcountForPageNumber / int.Parse(NovelParametersForPageCount.LimSelect);
+            TheNumberOfAllPages += 1;
+            return TheNumberOfAllPages;
         }
         else
         {
-            return 0;
-        }
-        
-        return TheNumberOfAllPages;
+            TheNumberOfAllPages = GetAllcountForPageNumber / int.Parse(NovelParametersForPageCount.LimSelect);
+            return TheNumberOfAllPages;
+        }  
     }
 
     //This is formula to adjust the number of pages. Display only the pages within five pages of the current page.
@@ -37,11 +39,6 @@ public partial class PartOfDisplaySearchResults
         if(allPageNumber.Any())
         {
             allPageNumber.Clear();
-        }
-
-        if(allPages % int.Parse(NovelParametersForPageCount.LimSelect) != 0)
-        {
-            allPages += 1;
         }
         
         for(int i=1; i<=allPages; i++)
