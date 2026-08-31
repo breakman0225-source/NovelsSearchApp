@@ -91,7 +91,7 @@ public partial class NovelsSearch : ComponentBase
         }
         catch(ArgumentException ex)
         {
-            Console.WriteLine($"Dictionaryの同じkeyに複数のvalueが存在しています。{ex.Message}");
+            Console.WriteLine($"{ex.Message}");
             IsApiError = true;
             StateHasChanged();
         }

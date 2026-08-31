@@ -17,25 +17,27 @@ public class SearchConditionDict
             //This "of" parameter specify output items. in this case, 
             // "title, wirter, abstract, genre, keyword, global_point, novelupdated_at, and ncode which is " is oututed.
         };
-
+    
     public static Dictionary<string, string?> AddToDictionary(SearchConditionModel parameters)
     {
        var dictionaryForAddingKeyword = new SearchConditionDict();
+       var listForConcatenatingkeywords = new List<string>();
 
         //This is the handle which specifies output of novels. `word` is specifies element of novels to be generated. `notword` is specifies element os novels to be not generated.
         if(!string.IsNullOrWhiteSpace(parameters.HighPriorityCriteria))
         {
-            if(!string.IsNullOrWhiteSpace(parameters.LowPriorityCriteria))
-            {
-                dictionaryForAddingKeyword.keywordOfSearch.Add("word", parameters.LowPriorityCriteria + parameters.HighPriorityCriteria);
-            }
-            else
-            {
-                dictionaryForAddingKeyword.keywordOfSearch.Add("word", parameters.HighPriorityCriteria);   
-            }
+            listForConcatenatingkeywords.Add(parameters.HighPriorityCriteria);   
         }
 
-        
+        if (!string.IsNullOrWhiteSpace(parameters.LowPriorityCriteria))
+        {
+            listForConcatenatingkeywords.Add(parameters.LowPriorityCriteria);
+        }
+
+        if (listForConcatenatingkeywords.Any())
+        {
+            dictionaryForAddingKeyword.keywordOfSearch.Add("word", string.Join(" ", listForConcatenatingkeywords));
+        }
 
         if(!string.IsNullOrWhiteSpace(parameters.Exceptword))
         {
