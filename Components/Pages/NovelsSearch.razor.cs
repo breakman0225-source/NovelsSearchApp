@@ -66,8 +66,26 @@ public partial class NovelsSearch : ComponentBase
                     AllCountForPageNumber = allcount.AllCount;//why does this code have no error?
                 }
 
+                var novelsSkippedAllCount = novelsList.Skip(1);
+
+                if (!string.IsNullOrWhiteSpace(ChangeGetParamForAPI.NovelParameters.LowPriorityCriteria))
+                {
+                    List<string> LowPriorityCriteriaList = ChangeGetParamForAPI.NovelParameters.LowPriorityCriteria
+                    .Split(new[] {' ', '　'}, StringSplitOptions.RemoveEmptyEntries)
+                    .ToList();
+
+                    novelsSkippedAllCount = novelsSkippedAllCount.Where(novel =>
+                        LowPriorityCriteriaList.Any(keyword => 
+                        (novel.Title != null && novel.Title.Contains(keyword)) ||
+                        (novel.Story != null && novel.Story.Contains(keyword)) ||
+                        (novel.Keyword != null && novel.Keyword.Contains(keyword)) ||
+                        (novel.Writer != null && novel.Writer.Contains(keyword))
+                        )
+                    );
+                }
+
                 //`novels` is the List for displaying on UI. First index in `novelsList` is allcount, so this isn't necessary.
-                novels = novelsList.Skip(1);
+                novels = novelsSkippedAllCount;
             }
 
         }

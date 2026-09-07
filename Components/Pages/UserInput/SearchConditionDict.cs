@@ -1,5 +1,6 @@
 //This area is used for using directive.
 using System.Diagnostics;
+using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Components;
 using NovelsSearchApp.Models;
@@ -21,22 +22,11 @@ public class SearchConditionDict
     public static Dictionary<string, string?> AddToDictionary(SearchConditionModel parameters)
     {
        var dictionaryForAddingKeyword = new SearchConditionDict();
-       var listForConcatenatingkeywords = new List<string>();
 
         //This is the handle which specifies output of novels. `word` is specifies element of novels to be generated. `notword` is specifies element os novels to be not generated.
         if(!string.IsNullOrWhiteSpace(parameters.HighPriorityCriteria))
         {
-            listForConcatenatingkeywords.Add(parameters.HighPriorityCriteria);   
-        }
-
-        if (!string.IsNullOrWhiteSpace(parameters.LowPriorityCriteria))
-        {
-            listForConcatenatingkeywords.Add(parameters.LowPriorityCriteria);
-        }
-
-        if (listForConcatenatingkeywords.Any())
-        {
-            dictionaryForAddingKeyword.keywordOfSearch.Add("word", string.Join(" ", listForConcatenatingkeywords));
+            dictionaryForAddingKeyword.keywordOfSearch.Add("word", parameters.HighPriorityCriteria);   
         }
 
         if(!string.IsNullOrWhiteSpace(parameters.Exceptword))
