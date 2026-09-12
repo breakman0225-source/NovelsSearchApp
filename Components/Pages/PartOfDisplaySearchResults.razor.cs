@@ -12,22 +12,55 @@ public partial class PartOfDisplaySearchResults
     private int TheNumberOfAllPages { get; set; } = default!;
     private List<int> allPageNumber = new();
     private List<int> displayPages = new();
-    //private List<int> displayPagesForUI = new();
+    private IEnumerable<NovelModel>? NovelsInChildForDisplaying { get; set; }
     private string? _pagenationMethodCheck;
+    private IEnumerable<NovelModel>? _lastNovelsInChild;
+    //private IEnumerable<NovelModel>? novelsForDisplaying;
 
-    private int CalculateAllPages()
-    { 
-        if(GetAllcountForPageNumber % int.Parse(NovelParametersForPageCount.LimSelect) != 0)
+    //Those variable is used for check logic.
+    //private int skipCount = 0;
+    //private IEnumerable<NovelModel>? takeCount;
+
+    protected override void OnParametersSet()
+    {
+        if(NovelsInChild == null || !NovelsInChild.Any())
         {
-            TheNumberOfAllPages = GetAllcountForPageNumber / int.Parse(NovelParametersForPageCount.LimSelect);
-            TheNumberOfAllPages += 1;
-            return TheNumberOfAllPages;
+            return;
+        }
+
+        int lim = int.Parse(NovelParametersForPageCount.LimSelect);
+        if(_lastNovelsInChild != NovelsInChild)
+        {
+            if (!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
+            {
+                NovelsInChildForDisplaying = NovelsInChild.Take(lim);
+            }
         }
         else
         {
-            TheNumberOfAllPages = GetAllcountForPageNumber / int.Parse(NovelParametersForPageCount.LimSelect);
-            return TheNumberOfAllPages;
-        }  
+            NovelsInChildForDisplaying = NovelsInChild;
+        }
+        _lastNovelsInChild = NovelsInChild;
+        base.OnParametersSet();
+    }
+    private int CalculateAllPages()
+    {
+       
+        int intlim = int.Parse(NovelParametersForPageCount.LimSelect);
+        int totalCount = 0;
+
+        if (!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
+        {
+            totalCount = NovelsInChild!.Count();
+        }
+        else
+        {
+            totalCount = GetAllcountForPageNumber;
+        }
+
+        TheNumberOfAllPages = (int)Math.Ceiling((double)totalCount / intlim);
+        
+        return TheNumberOfAllPages;
     }
 
     //This is formula to adjust the number of pages. Display only the pages within five pages of the current page.
@@ -36,6 +69,7 @@ public partial class PartOfDisplaySearchResults
         //This is handle to make List for Page.
         int allPages = CalculateAllPages();
 
+        //This if statement is used in the second time search because the results of the first search remains in `allPageNumber` List.
         if(allPageNumber.Any())
         {
             allPageNumber.Clear();
@@ -71,13 +105,25 @@ public partial class PartOfDisplaySearchResults
 
     private async Task HandlePagenationAsync(int pageNumber)
     {
-        NovelParametersForPageCount.CurrentPageNumber = pageNumber;
+        int lim = int.Parse(NovelParametersForPageCount.LimSelect);
 
-        if (OnPagenationParam.HasDelegate)
+        if (!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
         {
-            await OnPagenationParam.InvokeAsync();
-            //`await` is needed because delegated method `DisplayResults` has the function to get API, with network communication.
-            _pagenationMethodCheck = "The method is invoked.";
+            NovelsInChildForDisplaying = NovelsInChild!.Skip(lim * (pageNumber - 1));
+
+            NovelParametersForPageCount.CurrentPageNumber = pageNumber;
+
+        }
+        else
+        {
+            NovelParametersForPageCount.CurrentPageNumber = pageNumber;
+
+            if (OnPagenationParam.HasDelegate)
+            {
+                await OnPagenationParam.InvokeAsync();
+                //`await` is needed because delegated method `DisplayResults` has the function to get API, with network communication.
+                _pagenationMethodCheck = "The method is invoked.";
+            }
         }
     }
 

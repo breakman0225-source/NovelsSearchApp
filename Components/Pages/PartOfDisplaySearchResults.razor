@@ -21,6 +21,16 @@
                     <div>@_pagenationMethodCheck</div>
                     <div>@CheckDisplayTimesForPagenation</div>
 
+                    //this is `allcount` of novels. If There are some data in `LPC`, the number of `NovelsInChild` is displayed.
+                    @if(!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
+                    {
+                        <div>@NovelsInChild.Count()</div>
+                    }
+                    else
+                    {
+                        <div>@GetAllcountForPageNumber</div>
+                    }
+
                     <div>
                         <div>
                             @if(NovelParametersForPageCount.CurrentPageNumber != 1)
@@ -49,21 +59,45 @@
                                 <button @onclick="() => HandlePagenationAsync(MakePageList().Last())">@forwardArrowSymbol</button>
                             }
                         </div>
-                        
 
-                        @foreach(var novel in NovelsInChild)
+
+                        @if(!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
                         {
-                            <div>
-                                <p>@novel.Title</p>
-                                <p>@novel.Writer</p>
-                                <p>@novel.Story</p>
-                                <a href="@GetNovelURL(novel.Ncode)" target="_blank" rel="noopener noreferrer">@GetNovelURL(novel.Ncode)</a>
-                                <p>@GenreMapper.GetGenreValue(novel.Genre)</p> 
-                                <p>@novel.Keyword</p>
-                                <p>@novel.General_all_no</p>
-                                <p>@novel.Global_point</p>
-                                <p>@novel.Novelupdated_at</p>
-                            </div>
+                            @foreach(var novel in NovelsInChildForDisplaying!)
+                            {
+                                <div style="color:red;">@index</div>
+
+                                <div>
+                                    <p>@novel.Title</p>
+                                    <p>@novel.Writer</p>
+                                    <p>@novel.Story</p>
+                                    <a href="@GetNovelURL(novel.Ncode)" target="_blank" rel="noopener noreferrer">@GetNovelURL(novel.Ncode)</a>
+                                    <p>@GenreMapper.GetGenreValue(novel.Genre)</p> 
+                                    <p>@novel.Keyword</p>
+                                    <p>@novel.General_all_no</p>
+                                    <p>@novel.Global_point</p>
+                                    <p>@novel.Novelupdated_at</p>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            @foreach(var novel in NovelsInChild)
+                            {
+                                <div style="color:red;">@index</div>
+
+                                <div>
+                                    <p>@novel.Title</p>
+                                    <p>@novel.Writer</p>
+                                    <p>@novel.Story</p>
+                                    <a href="@GetNovelURL(novel.Ncode)" target="_blank" rel="noopener noreferrer">@GetNovelURL(novel.Ncode)</a>
+                                    <p>@GenreMapper.GetGenreValue(novel.Genre)</p> 
+                                    <p>@novel.Keyword</p>
+                                    <p>@novel.General_all_no</p>
+                                    <p>@novel.Global_point</p>
+                                    <p>@novel.Novelupdated_at</p>
+                                </div>
+                            }
                         }
 
                         <div>
@@ -129,8 +163,8 @@
     public bool IsGettingAPISuccessInChild { get; set; }
     
     [Parameter]
-    public IEnumerable<NovelModel>?  NovelsInChild { get; set; }
-    
+    public IEnumerable<NovelModel>? NovelsInChild { get; set; }
+        
     [Parameter]
     public bool IsSearchbuttonpushedInChild { get; set;}
 
@@ -154,4 +188,5 @@
 
     private string backArrowSymbol = "<<";
     private string forwardArrowSymbol = ">>";
+    private int index = 0;
 }

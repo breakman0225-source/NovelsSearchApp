@@ -41,7 +41,14 @@ public class SearchConditionDict
 
         if(!string.IsNullOrWhiteSpace(parameters.LimSelect))
         {
-            dictionaryForAddingKeyword.keywordOfSearch.Add("lim", parameters.LimSelect);
+            if (!string.IsNullOrWhiteSpace(parameters.LowPriorityCriteria))
+            {
+                dictionaryForAddingKeyword.keywordOfSearch.Add("lim", 500.ToString());
+            }
+            else//This magic number "500" is teh limit of the number of novels that can be obtained from narou API.
+            {
+                dictionaryForAddingKeyword.keywordOfSearch.Add("lim", parameters.LimSelect);   
+            }
         }
 
         if(parameters.CurrentPageNumber != 1 && parameters.CurrentPageNumber <= 2000)

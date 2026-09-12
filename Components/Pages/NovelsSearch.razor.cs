@@ -68,7 +68,9 @@ public partial class NovelsSearch : ComponentBase
 
                 var novelsSkippedAllCount = novelsList.Skip(1);
 
-                if (!string.IsNullOrWhiteSpace(ChangeGetParamForAPI.NovelParameters.LowPriorityCriteria))
+                //This is OR Search Logic. 
+                //This is implemented by filtering the search results of HPC to extract novels that match the LPC condition using LINQ.
+                if(!string.IsNullOrWhiteSpace(ChangeGetParamForAPI.NovelParameters.LowPriorityCriteria))
                 {
                     List<string> LowPriorityCriteriaList = ChangeGetParamForAPI.NovelParameters.LowPriorityCriteria
                     .Split(new[] {' ', '　'}, StringSplitOptions.RemoveEmptyEntries)
