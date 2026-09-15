@@ -21,7 +21,7 @@ public partial class PartOfDisplaySearchResults
     //private int skipCount = 0;
     //private IEnumerable<NovelModel>? takeCount;
 
-    protected override void OnParametersSet()
+    protected override void OnParametersSet()//This method is used to match the number of novels in the first Page with `LimSelect`.
     {
         if(NovelsInChild == null || !NovelsInChild.Any())
         {
@@ -29,20 +29,23 @@ public partial class PartOfDisplaySearchResults
         }
 
         int lim = int.Parse(NovelParametersForPageCount.LimSelect);
-        if(_lastNovelsInChild != NovelsInChild)
-        {
-            if (!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
+
+        if (!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
+        {   
+            if(_lastNovelsInChild != NovelsInChild)//This if statement aim to specify the signal of calling `OnParametersSet` method because of prevending malfunction of other Parameter.
             {
-                NovelsInChildForDisplaying = NovelsInChild.Take(lim);
+                NovelsInChildForDisplaying = NovelsInChild.Take(lim);//This code prevend displaying all of novels in List in the first page.
             }
         }
         else
         {
             NovelsInChildForDisplaying = NovelsInChild;
         }
+
         _lastNovelsInChild = NovelsInChild;
-        base.OnParametersSet();
+        base.OnParametersSet();//This `base.onParametersSet` is not neccesary.
     }
+
     private int CalculateAllPages()
     {
        
@@ -68,6 +71,9 @@ public partial class PartOfDisplaySearchResults
     {
         //This is handle to make List for Page.
         int allPages = CalculateAllPages();
+        int lim = int.Parse(NovelParametersForPageCount.LimSelect);
+        
+        int pageLimit = 2000 / lim;
 
         //This if statement is used in the second time search because the results of the first search remains in `allPageNumber` List.
         if(allPageNumber.Any())
@@ -75,7 +81,7 @@ public partial class PartOfDisplaySearchResults
             allPageNumber.Clear();
         }
         
-        for(int i=1; i<=allPages; i++)
+        for(int i=1; i<=allPages&i<=pageLimit; i++)
         {
             allPageNumber.Add(i);
         }
@@ -109,7 +115,7 @@ public partial class PartOfDisplaySearchResults
 
         if (!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
         {
-            NovelsInChildForDisplaying = NovelsInChild!.Skip(lim * (pageNumber - 1));
+            NovelsInChildForDisplaying = NovelsInChild!.Skip(lim * (pageNumber - 1)).Take(lim);
 
             NovelParametersForPageCount.CurrentPageNumber = pageNumber;
 
@@ -126,6 +132,14 @@ public partial class PartOfDisplaySearchResults
             }
         }
     }
+
+    /*private int NovelsIndex()
+    {
+        if(NovelParametersForPageCount.CurrentPageNumber == 1)
+        {
+            
+        }
+    }*/
 
     private string GetNovelURL(string ncode)
     {

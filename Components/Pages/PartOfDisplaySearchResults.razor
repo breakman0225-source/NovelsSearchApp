@@ -15,122 +15,124 @@
         {
             @if(NovelsInChild.Any() && GetAllcountForPageNumber != 0)
             {
-                @if(NovelParametersForPageCount.CurrentPageNumber < 2000)
+                int lim = int.Parse(NovelParametersForPageCount.LimSelect);
+                int offset = (NovelParametersForPageCount.CurrentPageNumber -1) * lim;
+                int currentPageIndex = 1;
+                
+                <div>@ToCheckQueryParam</div>
+                <div>@_pagenationMethodCheck</div>
+                <div>@CheckDisplayTimesForPagenation</div>
+
+                //this is `allcount` of novels. If There are some data in `LPC`, the number of `NovelsInChild` is displayed.
+                @if(!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
                 {
-                    <div>@ToCheckQueryParam</div>
-                    <div>@_pagenationMethodCheck</div>
-                    <div>@CheckDisplayTimesForPagenation</div>
-
-                    //this is `allcount` of novels. If There are some data in `LPC`, the number of `NovelsInChild` is displayed.
-                    @if(!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
-                    {
-                        <div>@NovelsInChild.Count()</div>
-                    }
-                    else
-                    {
-                        <div>@GetAllcountForPageNumber</div>
-                    }
-
-                    <div>
-                        <div>
-                            @if(NovelParametersForPageCount.CurrentPageNumber != 1)
-                            {
-                                <button @onclick="() => HandlePagenationAsync(MakePageList().FirstOrDefault())">@backArrowSymbol</button>
-                                <button @onclick="() => HandlePagenationAsync(NovelParametersForPageCount.CurrentPageNumber - 1)">Back</button>
-                            }
-
-
-                            @foreach(var displayedPages in MakeDisplayPages())
-                            {
-                                @if(displayedPages == NovelParametersForPageCount.CurrentPageNumber)
-                                {
-                                    <strong>@displayedPages</strong>
-                                }
-                                else
-                                {
-                                    <button  @onclick="() => HandlePagenationAsync(displayedPages)">@displayedPages</button>
-                                }
-                                
-                            }
-
-                            @if(NovelParametersForPageCount.CurrentPageNumber != MakePageList().Last())
-                            {
-                                <button @onclick="() => HandlePagenationAsync(NovelParametersForPageCount.CurrentPageNumber + 1)">Next</button>
-                                <button @onclick="() => HandlePagenationAsync(MakePageList().Last())">@forwardArrowSymbol</button>
-                            }
-                        </div>
-
-
-                        @if(!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
-                        {
-                            @foreach(var novel in NovelsInChildForDisplaying!)
-                            {
-                                <div style="color:red;">@index</div>
-
-                                <div>
-                                    <p>@novel.Title</p>
-                                    <p>@novel.Writer</p>
-                                    <p>@novel.Story</p>
-                                    <a href="@GetNovelURL(novel.Ncode)" target="_blank" rel="noopener noreferrer">@GetNovelURL(novel.Ncode)</a>
-                                    <p>@GenreMapper.GetGenreValue(novel.Genre)</p> 
-                                    <p>@novel.Keyword</p>
-                                    <p>@novel.General_all_no</p>
-                                    <p>@novel.Global_point</p>
-                                    <p>@novel.Novelupdated_at</p>
-                                </div>
-                            }
-                        }
-                        else
-                        {
-                            @foreach(var novel in NovelsInChild)
-                            {
-                                <div style="color:red;">@index</div>
-
-                                <div>
-                                    <p>@novel.Title</p>
-                                    <p>@novel.Writer</p>
-                                    <p>@novel.Story</p>
-                                    <a href="@GetNovelURL(novel.Ncode)" target="_blank" rel="noopener noreferrer">@GetNovelURL(novel.Ncode)</a>
-                                    <p>@GenreMapper.GetGenreValue(novel.Genre)</p> 
-                                    <p>@novel.Keyword</p>
-                                    <p>@novel.General_all_no</p>
-                                    <p>@novel.Global_point</p>
-                                    <p>@novel.Novelupdated_at</p>
-                                </div>
-                            }
-                        }
-
-                        <div>
-                            @if(NovelParametersForPageCount.CurrentPageNumber != 1)
-                            {
-                                <button @onclick="() => HandlePagenationAsync(MakePageList().FirstOrDefault())">@backArrowSymbol</button>
-                                <button @onclick="() => HandlePagenationAsync(NovelParametersForPageCount.CurrentPageNumber - 1)">Back</button>
-                            }
-
-                            @foreach(var displayedPages in MakeDisplayPages())
-                            {
-                                @if(displayedPages == NovelParametersForPageCount.CurrentPageNumber)
-                                {
-                                    <strong>@displayedPages</strong>
-                                }
-                                else
-                                {
-                                    <button  @onclick="() => HandlePagenationAsync(displayedPages)">@displayedPages</button>
-                                }
-                            }
-
-                            @if(NovelParametersForPageCount.CurrentPageNumber != MakePageList().Last())
-                            {
-                                <button @onclick="() => HandlePagenationAsync(NovelParametersForPageCount.CurrentPageNumber + 1)">Next</button>
-                                <button @onclick="() => HandlePagenationAsync(MakePageList().Last())">@forwardArrowSymbol</button>
-                            }
-                        </div>
-                    </div>
+                    <div>@NovelsInChild.Count()</div>
                 }
                 else
                 {
-                    <p>2000作品以上表示することはできません。キーワードまたは並び順を変更して再度お試しください。</p>
+                    <div>@GetAllcountForPageNumber</div>
                 }
+
+                <div>
+                    <div>
+                        @if(NovelParametersForPageCount.CurrentPageNumber != 1)
+                        {
+                            <button @onclick="() => HandlePagenationAsync(MakePageList().FirstOrDefault())">@backArrowSymbol</button>
+                            <button @onclick="() => HandlePagenationAsync(NovelParametersForPageCount.CurrentPageNumber - 1)">Back</button>
+                        }
+
+
+                        @foreach(var displayedPages in MakeDisplayPages())
+                        {
+                            @if(displayedPages == NovelParametersForPageCount.CurrentPageNumber)
+                            {
+                                <strong>@displayedPages</strong>
+                            }
+                            else
+                            {
+                                <button  @onclick="() => HandlePagenationAsync(displayedPages)">@displayedPages</button>
+                            }
+                            
+                        }
+
+                        @if(NovelParametersForPageCount.CurrentPageNumber != MakePageList().Last())
+                        {
+                            <button @onclick="() => HandlePagenationAsync(NovelParametersForPageCount.CurrentPageNumber + 1)">Next</button>
+                            <button @onclick="() => HandlePagenationAsync(MakePageList().Last())">@forwardArrowSymbol</button>
+                        }
+                    </div>
+
+
+                    @if(!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
+                    {
+                        @foreach(var novel in NovelsInChildForDisplaying!)
+                        {
+                            overRank = offset + currentPageIndex;
+                            <div style="color:red;">@overRank</div>
+
+                            <div>
+                                <p>@novel.Title</p>
+                                <p>@novel.Writer</p>
+                                <p>@novel.Story</p>
+                                <a href="@GetNovelURL(novel.Ncode)" target="_blank" rel="noopener noreferrer">@GetNovelURL(novel.Ncode)</a>
+                                <p>@GenreMapper.GetGenreValue(novel.Genre)</p> 
+                                <p>@novel.Keyword</p>
+                                <p>@novel.General_all_no</p>
+                                <p>@novel.Global_point</p>
+                                <p>@novel.Novelupdated_at</p>
+                            </div>
+                            currentPageIndex++;
+                        }
+                    }
+                    else
+                    {
+                        @foreach(var novel in NovelsInChildForDisplaying!)
+                        {
+                            int overRank = offset + currentPageIndex;
+                            <div style="color:red;">@overRank</div>
+
+                            <div>
+                                <p>@novel.Title</p>
+                                <p>@novel.Writer</p>
+                                <p>@novel.Story</p>
+                                <a href="@GetNovelURL(novel.Ncode)" target="_blank" rel="noopener noreferrer">@GetNovelURL(novel.Ncode)</a>
+                                <p>@GenreMapper.GetGenreValue(novel.Genre)</p> 
+                                <p>@novel.Keyword</p>
+                                <p>@novel.General_all_no</p>
+                                <p>@novel.Global_point</p>
+                                <p>@novel.Novelupdated_at</p>
+                            </div>
+                            currentPageIndex++;
+                        }
+                    }
+
+                    <div>
+                        @if(NovelParametersForPageCount.CurrentPageNumber != 1)
+                        {
+                            <button @onclick="() => HandlePagenationAsync(MakePageList().FirstOrDefault())">@backArrowSymbol</button>
+                            <button @onclick="() => HandlePagenationAsync(NovelParametersForPageCount.CurrentPageNumber - 1)">Back</button>
+                        }
+
+                        @foreach(var displayedPages in MakeDisplayPages())
+                        {
+                            @if(displayedPages == NovelParametersForPageCount.CurrentPageNumber)
+                            {
+                                <strong>@displayedPages</strong>
+                            }
+                            else
+                            {
+                                <button  @onclick="() => HandlePagenationAsync(displayedPages)">@displayedPages</button>
+                            }
+                        }
+
+                        @if(NovelParametersForPageCount.CurrentPageNumber != MakePageList().Last())
+                        {
+                            <button @onclick="() => HandlePagenationAsync(NovelParametersForPageCount.CurrentPageNumber + 1)">Next</button>
+                            <button @onclick="() => HandlePagenationAsync(MakePageList().Last())">@forwardArrowSymbol</button>
+                        }
+                    </div>
+                </div>
+                
             }
             else
             {
@@ -188,5 +190,5 @@
 
     private string backArrowSymbol = "<<";
     private string forwardArrowSymbol = ">>";
-    private int index = 0;
+    private int overRank;
 }

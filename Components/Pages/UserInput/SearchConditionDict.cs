@@ -51,7 +51,7 @@ public class SearchConditionDict
             }
         }
 
-        if(parameters.CurrentPageNumber != 1 && parameters.CurrentPageNumber <= 2000)
+        if(parameters.CurrentPageNumber != 1)
         {
             var stForPagenate = (parameters.CurrentPageNumber - 1) * int.Parse(parameters.LimSelect) + 1;
             dictionaryForAddingKeyword.keywordOfSearch.Add("st", stForPagenate.ToString());

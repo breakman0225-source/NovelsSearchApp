@@ -30,6 +30,7 @@ public partial class SearchCriteria
         {
             await OnParamChanged.InvokeAsync();//This code has the handle which execute method delegated by parent component in this case `NovelsSearch.razor`.
             //`await` is needed because delegated method `DisplayResults` has the function to get API, with network communication.
+            NovelParameters.CurrentPageNumber = 1;
         }
     }
 }
