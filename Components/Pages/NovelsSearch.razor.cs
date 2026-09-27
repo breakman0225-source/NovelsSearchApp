@@ -37,16 +37,20 @@ public partial class NovelsSearch : ComponentBase
         IsSearchbuttonpushed = true;
         List<NovelModel> accumulatedNovels = new();
         int lim = int.Parse(ChangeGetParamForAPI.NovelParameters.LimSelect);
-        int roopIndex = ChangeGetParamForAPI.NovelParameters.TheNumberOfDisplayingTimes;
-
+        int loopIndex = 0;
+        if (!string.IsNullOrWhiteSpace(ChangeGetParamForAPI.NovelParameters.LowPriorityCriteria))
+        {
+            loopIndex = ChangeGetParamForAPI.NovelParameters.TheNumberOfDisplayingTimes;    
+        }
+        
         //This is handle of getting narou API.
         var httpClient = HttpClientFactory.CreateClient("NarouAPI");
 
         try
         {
-            while(accumulatedNovels.Count < lim && roopIndex <= 3)
+            while(accumulatedNovels.Count < lim && loopIndex <= 3)
             {
-                var currentSt = roopIndex * 500 + 1;//This `currentSt` is used for `OR Search`
+                var currentSt = loopIndex * 500 + 1;//This `currentSt` is used for `OR Search`
 
                 //`CheckAPI` is used for check the contents of URL which get the information of novels by query parameters.
                 CheckAPI = ChangeGetParamForAPI.ChangeQueryString(currentSt);
@@ -93,9 +97,9 @@ public partial class NovelsSearch : ComponentBase
                         accumulatedNovels.AddRange(novelsSkippedAllCount);
                         //accumulatedNovels = novelsSkippedAllCount.ToList();
 
-                        if(accumulatedNovels.Count > lim || roopIndex > 3)
+                        if(accumulatedNovels.Count > lim || loopIndex > 3)
                         {
-                            roopIndex++;
+                            loopIndex++;
                             //ChangeGetParamForAPI.NovelParameters.TheNumberOfDisplayingTimes++;;
                             break;
                         }
@@ -103,7 +107,7 @@ public partial class NovelsSearch : ComponentBase
                     else
                     {
                         accumulatedNovels.AddRange(novelsSkippedAllCount);
-                        roopIndex++;
+                        loopIndex++;
                         //ChangeGetParamForAPI.NovelParameters.TheNumberOfDisplayingTimes++;
                         break;
                     }
@@ -113,10 +117,10 @@ public partial class NovelsSearch : ComponentBase
                     break;
                 }
                 //ChangeGetParamForAPI.NovelParameters.TheNumberOfDisplayingTimes++;
-                roopIndex++;
+                loopIndex++;
             }
-            //ChangeGetParamForAPI.NovelParameters.TheNumberOfDisplayingTimes = roopIndex;
-            ChangeGetParamForAPI.NovelParameters.TheNumberOfDisplayingTimes = roopIndex;
+            //ChangeGetParamForAPI.NovelParameters.TheNumberOfDisplayingTimes = loopIndex;
+            ChangeGetParamForAPI.NovelParameters.TheNumberOfDisplayingTimes = loopIndex;
             //`novels` is the List for displaying on UI. First index in `novelsList` is allcount, so this isn't necessary.
             novels = accumulatedNovels;
 
