@@ -12,7 +12,22 @@ public partial class PartOfDisplaySearchResults
     private int TheNumberOfAllPages { get; set; } = default!;
     private List<int> allPageNumber = new();
     private List<int> displayPages = new();
-    private IEnumerable<NovelModel>? NovelsInChildForDisplaying { get; set; }
+    private IEnumerable<NovelModel>? NovelsInChildForDisplaying {
+        get
+        {
+            if(LocalNovelStock == null || !LocalNovelStock.Any()) return null;
+
+            int lim = int.Parse(NovelParametersForPageCount.LimSelect);
+            if (!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
+            {
+                return LocalNovelStock.Skip(lim * (NovelParametersForPageCount.CurrentPageNumber - 1)).Take(lim);
+            }
+            else
+            {
+                return LocalNovelStock;
+            }
+        }
+     }
     private List<NovelModel>? LocalNovelStock { get; set; }
     private IEnumerable<NovelModel>? _lastNovelsInChild;//This variable is only used to check change, so this variabl has `IEnumerable` type.
     private int _lastAllPages;
@@ -35,7 +50,7 @@ public partial class PartOfDisplaySearchResults
                 if (!_isFetchingMore)
                 {
                     LocalNovelStock = NovelsInChild.ToList();
-                    NovelsInChildForDisplaying = LocalNovelStock.Take(lim);
+                    //NovelsInChildForDisplaying = LocalNovelStock.Take(lim);(09/27)
                 }
                 else
                 {
@@ -45,7 +60,7 @@ public partial class PartOfDisplaySearchResults
         } 
         else
         {
-            NovelsInChildForDisplaying = NovelsInChild.ToList();
+            LocalNovelStock = NovelsInChild.ToList();
         }
 
         _lastNovelsInChild = NovelsInChild;
@@ -136,23 +151,19 @@ public partial class PartOfDisplaySearchResults
                 {
                     if(_lastLocalNovelStock >= lim * NovelParametersForPageCount.CurrentPageNumber)
                     {
-                        NovelParametersForPageCount.CurrentPageNumber = pageNumber;     
-                    }
-                    else
-                    {
-                        
+                        NovelParametersForPageCount.CurrentPageNumber = pageNumber;//This code means displaying page watched by user automatically forward to newxt page.
                     }
                 }
             }
             else
             {
-                NovelParametersForPageCount.CurrentPageNumber = pageNumber; 
+                NovelParametersForPageCount.CurrentPageNumber = pageNumber;//This code means displaying page watched by user automatically forward to newxt page. 
             }
 
-            NovelsInChildForDisplaying = LocalNovelStock!
+            /*NovelsInChildForDisplaying = LocalNovelStock!
             .Skip(lim * (NovelParametersForPageCount.CurrentPageNumber - 1))
             .Take(lim)
-            .ToList();               
+            .ToList(); |09/27|*/              
             
         }
         else//This is AND Search pagination.
