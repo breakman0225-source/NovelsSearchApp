@@ -13,4 +13,5 @@ public class SearchConditionModel
     public string OrderSelect { get; set; } = "new";    
     public string LimSelect { get; set; } = "20";
     public int CurrentPageNumber { get; set; } = 1;
+    public int TheNumberOfDisplayingTimes { get; set; } = 0;
 }

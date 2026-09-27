@@ -13,14 +13,12 @@ public partial class PartOfDisplaySearchResults
     private List<int> allPageNumber = new();
     private List<int> displayPages = new();
     private IEnumerable<NovelModel>? NovelsInChildForDisplaying { get; set; }
-    private string? _pagenationMethodCheck;
-    private IEnumerable<NovelModel>? _lastNovelsInChild;
-    //private IEnumerable<NovelModel>? novelsForDisplaying;
-
-    //Those variable is used for check logic.
-    //private int skipCount = 0;
-    //private IEnumerable<NovelModel>? takeCount;
-
+    private List<NovelModel>? LocalNovelStock { get; set; }
+    private IEnumerable<NovelModel>? _lastNovelsInChild;//This variable is only used to check change, so this variabl has `IEnumerable` type.
+    private int _lastAllPages;
+    private bool _isFetchingMore = false;
+    //private IEnumerable<NovelModel>? _lastDisplayingNovels;// What is this member for?(09/27)
+   
     protected override void OnParametersSet()//This method is used to match the number of novels in the first Page with `LimSelect`.
     {
         if(NovelsInChild == null || !NovelsInChild.Any())
@@ -31,15 +29,23 @@ public partial class PartOfDisplaySearchResults
         int lim = int.Parse(NovelParametersForPageCount.LimSelect);
 
         if (!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
-        {   
-            if(_lastNovelsInChild != NovelsInChild)//This if statement aim to specify the signal of calling `OnParametersSet` method because of prevending malfunction of other Parameter.
+        {
+            if(_lastNovelsInChild != NovelsInChild)
             {
-                NovelsInChildForDisplaying = NovelsInChild.Take(lim);//This code prevend displaying all of novels in List in the first page.
+                if (!_isFetchingMore)
+                {
+                    LocalNovelStock = NovelsInChild.ToList();
+                    NovelsInChildForDisplaying = LocalNovelStock.Take(lim);
+                }
+                else
+                {
+                    LocalNovelStock!.AddRange(NovelsInChild);
+                }
             }
-        }
+        } 
         else
         {
-            NovelsInChildForDisplaying = NovelsInChild;
+            NovelsInChildForDisplaying = NovelsInChild.ToList();
         }
 
         _lastNovelsInChild = NovelsInChild;
@@ -54,7 +60,7 @@ public partial class PartOfDisplaySearchResults
 
         if (!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
         {
-            totalCount = NovelsInChild!.Count();
+            totalCount = LocalNovelStock!.Count();
         }
         else
         {
@@ -113,33 +119,54 @@ public partial class PartOfDisplaySearchResults
     {
         int lim = int.Parse(NovelParametersForPageCount.LimSelect);
 
-        if (!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
+        if(!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
         {
-            NovelsInChildForDisplaying = NovelsInChild!.Skip(lim * (pageNumber - 1)).Take(lim);
+            if(pageNumber > CalculateAllPages() && OnPagenationParam.HasDelegate)
+            {
+                var _lastLocalNovelStock = LocalNovelStock!.Count;
 
-            NovelParametersForPageCount.CurrentPageNumber = pageNumber;
+                _lastAllPages = CalculateAllPages();
+                _isFetchingMore = true;
 
+                await OnPagenationParam.InvokeAsync();
+
+                _isFetchingMore = false;
+
+                if(CalculateAllPages() > _lastAllPages)
+                {
+                    if(_lastLocalNovelStock >= lim * NovelParametersForPageCount.CurrentPageNumber)
+                    {
+                        NovelParametersForPageCount.CurrentPageNumber = pageNumber;     
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+            }
+            else
+            {
+                NovelParametersForPageCount.CurrentPageNumber = pageNumber; 
+            }
+
+            NovelsInChildForDisplaying = LocalNovelStock!
+            .Skip(lim * (NovelParametersForPageCount.CurrentPageNumber - 1))
+            .Take(lim)
+            .ToList();               
+            
         }
-        else
+        else//This is AND Search pagination.
         {
             NovelParametersForPageCount.CurrentPageNumber = pageNumber;
 
             if (OnPagenationParam.HasDelegate)
             {
+                //NovelParametersForPageCount.TheNumberOfDisplayingTimes += 1;//This code is incorrect because there is increment handle in parent component.
                 await OnPagenationParam.InvokeAsync();
                 //`await` is needed because delegated method `DisplayResults` has the function to get API, with network communication.
-                _pagenationMethodCheck = "The method is invoked.";
             }
         }
     }
-
-    /*private int NovelsIndex()
-    {
-        if(NovelParametersForPageCount.CurrentPageNumber == 1)
-        {
-            
-        }
-    }*/
 
     private string GetNovelURL(string ncode)
     {

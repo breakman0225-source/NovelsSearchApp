@@ -19,7 +19,7 @@ public class SearchConditionDict
             // "title, wirter, abstract, genre, keyword, global_point, novelupdated_at, and ncode which is " is oututed.
         };
     
-    public static Dictionary<string, string?> AddToDictionary(SearchConditionModel parameters)
+    public static Dictionary<string, string?> AddToDictionary(SearchConditionModel parameters, int? overrideSt)
     {
        var dictionaryForAddingKeyword = new SearchConditionDict();
 
@@ -51,11 +51,45 @@ public class SearchConditionDict
             }
         }
 
-        if(parameters.CurrentPageNumber != 1)
+        if(!string.IsNullOrWhiteSpace(parameters.LowPriorityCriteria))
         {
-            var stForPagenate = (parameters.CurrentPageNumber - 1) * int.Parse(parameters.LimSelect) + 1;
-            dictionaryForAddingKeyword.keywordOfSearch.Add("st", stForPagenate.ToString());
+            dictionaryForAddingKeyword.keywordOfSearch.Add("st", overrideSt.ToString());
         }
+        else
+        {
+            if(parameters.CurrentPageNumber != 1)
+            {
+                var st = (parameters.CurrentPageNumber - 1) * int.Parse(parameters.LimSelect) + 1;
+                dictionaryForAddingKeyword.keywordOfSearch.Add("st", st.ToString());
+            }
+            
+        }
+        /*if(overrideSt != 0)
+        {
+            var st = overrideSt * 500 + 1;
+            dictionaryForAddingKeyword.keywordOfSearch.Add("st", st.ToString());
+        }
+        else if(!string.IsNullOrWhiteSpace(parameters.LowPriorityCriteria))
+        {
+            if(parameters.CurrentPageNumber == 1)
+            {
+                var st = 1;
+                dictionaryForAddingKeyword.keywordOfSearch.Add("st", st.ToString());
+            }
+            else
+            {
+                var st = parameters.TheNumberOfDisplayingTimes * 500 + 1;
+                dictionaryForAddingKeyword.keywordOfSearch.Add("st", st.ToString());
+            }
+        }
+        else
+        {
+            if(parameters.CurrentPageNumber != 1)
+            {
+                var stForPagenate = (parameters.CurrentPageNumber - 1) * int.Parse(parameters.LimSelect) + 1;
+                dictionaryForAddingKeyword.keywordOfSearch.Add("st", stForPagenate.ToString());
+            }
+        }*/
 
         return dictionaryForAddingKeyword.keywordOfSearch;
     }

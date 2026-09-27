@@ -24,7 +24,6 @@ public partial class NovelsSearch : ComponentBase
     public bool IsSearchbuttonpushed { get; set; } = false;
 
     public string? CheckAPI { get; set; }
-    public int CheckDisplaytimes { get; set; }
 
     protected SearchCriteria ChangeGetParamForAPI { get; set; } = default!;
     
@@ -36,59 +35,90 @@ public partial class NovelsSearch : ComponentBase
     public async Task DisplayResults()
     {
         IsSearchbuttonpushed = true;
+        List<NovelModel> accumulatedNovels = new();
+        int lim = int.Parse(ChangeGetParamForAPI.NovelParameters.LimSelect);
+        int roopIndex = ChangeGetParamForAPI.NovelParameters.TheNumberOfDisplayingTimes;
+
+        //This is handle of getting narou API.
+        var httpClient = HttpClientFactory.CreateClient("NarouAPI");
 
         try
         {
-            Console.WriteLine("`Displayresults`method is invoked.");
-            //This is handle of getting narou API.
-            var httpClient = HttpClientFactory.CreateClient("NarouAPI");
-            using HttpResponseMessage response = await httpClient.GetAsync(ChangeGetParamForAPI.ChangeQueryString());//Handle the return of `ChaneQueryString`.
-
-            //`CheckAPI` is used for check the contents of URL which get the information of novels by query parameters.
-            CheckAPI = ChangeGetParamForAPI.ChangeQueryString();
-
-            //`EnsureSuccessStatusCode`checks whether the status code returned by API is in 200 range.
-            //If the status code is not in 200 range, it immediately throws an `HttpRequestException`.
-            response.EnsureSuccessStatusCode();            
-            
-            //`IsGetteingAPISuccess`is used for debug.
-            IsGettingAPISuccess = true;
-            CheckDisplaytimes += 1;
-
-            using var responseStream = await response.Content.ReadAsStreamAsync();
-            IEnumerable<NovelModel>? novelsList = await JsonSerializer.DeserializeAsync<IEnumerable<NovelModel>>(responseStream);
-            if(novelsList != null && novelsList.Any())
+            while(accumulatedNovels.Count < lim && roopIndex <= 3)
             {
-                //Get allcount to calculate the number of all pages.
-                var allcount = novelsList.FirstOrDefault();
-                if(allcount != null)
+                var currentSt = roopIndex * 500 + 1;//This `currentSt` is used for `OR Search`
+
+                //`CheckAPI` is used for check the contents of URL which get the information of novels by query parameters.
+                CheckAPI = ChangeGetParamForAPI.ChangeQueryString(currentSt);
+
+                using HttpResponseMessage response = await httpClient.GetAsync(CheckAPI);//Handle the return of `ChaneQueryString`.
+
+                //`EnsureSuccessStatusCode`checks whether the status code returned by API is in 200 range.
+                //If the status code is not in 200 range, it immediately throws an `HttpRequestException`.
+                response.EnsureSuccessStatusCode();            
+                
+                //`IsGetteingAPISuccess`is used for debug.
+                IsGettingAPISuccess = true;
+
+                using var responseStream = await response.Content.ReadAsStreamAsync();
+                IEnumerable<NovelModel>? novelsList = await JsonSerializer.DeserializeAsync<IEnumerable<NovelModel>>(responseStream);
+                if(novelsList != null && novelsList.Any())
                 {
-                    AllCountForPageNumber = allcount.AllCount;//why does this code have no error?
+                    //Get allcount to calculate the number of all pages.
+                    var allcount = novelsList.FirstOrDefault();
+                    if(allcount != null)
+                    {
+                        AllCountForPageNumber = allcount.AllCount;//why does this code have no error?
+                    }
+
+                    var novelsSkippedAllCount = novelsList.Skip(1);
+
+                    //This is OR Search Logic. 
+                    //This is implemented by filtering the search results of HPC to extract novels that match the LPC condition using LINQ.
+                    if(!string.IsNullOrWhiteSpace(ChangeGetParamForAPI.NovelParameters.LowPriorityCriteria))
+                    {
+                        List<string> LowPriorityCriteriaList = ChangeGetParamForAPI.NovelParameters.LowPriorityCriteria
+                        .Split(new[] {' ', '　'}, StringSplitOptions.RemoveEmptyEntries)
+                        .ToList();
+
+                        novelsSkippedAllCount = novelsSkippedAllCount.Where(novel =>
+                            LowPriorityCriteriaList.Any(keyword => 
+                            (novel.Title != null && novel.Title.Contains(keyword)) ||
+                            (novel.Story != null && novel.Story.Contains(keyword)) ||
+                            (novel.Keyword != null && novel.Keyword.Contains(keyword)) ||
+                            (novel.Writer != null && novel.Writer.Contains(keyword))
+                            )
+                        );
+                        
+                        accumulatedNovels.AddRange(novelsSkippedAllCount);
+                        //accumulatedNovels = novelsSkippedAllCount.ToList();
+
+                        if(accumulatedNovels.Count > lim || roopIndex > 3)
+                        {
+                            roopIndex++;
+                            //ChangeGetParamForAPI.NovelParameters.TheNumberOfDisplayingTimes++;;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        accumulatedNovels.AddRange(novelsSkippedAllCount);
+                        roopIndex++;
+                        //ChangeGetParamForAPI.NovelParameters.TheNumberOfDisplayingTimes++;
+                        break;
+                    }
                 }
-
-                var novelsSkippedAllCount = novelsList.Skip(1);
-
-                //This is OR Search Logic. 
-                //This is implemented by filtering the search results of HPC to extract novels that match the LPC condition using LINQ.
-                if(!string.IsNullOrWhiteSpace(ChangeGetParamForAPI.NovelParameters.LowPriorityCriteria))
+                else
                 {
-                    List<string> LowPriorityCriteriaList = ChangeGetParamForAPI.NovelParameters.LowPriorityCriteria
-                    .Split(new[] {' ', '　'}, StringSplitOptions.RemoveEmptyEntries)
-                    .ToList();
-
-                    novelsSkippedAllCount = novelsSkippedAllCount.Where(novel =>
-                        LowPriorityCriteriaList.Any(keyword => 
-                        (novel.Title != null && novel.Title.Contains(keyword)) ||
-                        (novel.Story != null && novel.Story.Contains(keyword)) ||
-                        (novel.Keyword != null && novel.Keyword.Contains(keyword)) ||
-                        (novel.Writer != null && novel.Writer.Contains(keyword))
-                        )
-                    );
+                    break;
                 }
-
-                //`novels` is the List for displaying on UI. First index in `novelsList` is allcount, so this isn't necessary.
-                novels = novelsSkippedAllCount;
+                //ChangeGetParamForAPI.NovelParameters.TheNumberOfDisplayingTimes++;
+                roopIndex++;
             }
+            //ChangeGetParamForAPI.NovelParameters.TheNumberOfDisplayingTimes = roopIndex;
+            ChangeGetParamForAPI.NovelParameters.TheNumberOfDisplayingTimes = roopIndex;
+            //`novels` is the List for displaying on UI. First index in `novelsList` is allcount, so this isn't necessary.
+            novels = accumulatedNovels;
 
         }
         catch(HttpRequestException ex)
