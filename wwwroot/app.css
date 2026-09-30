@@ -1,5 +1,10 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #fffdd0;
+}
+
+.editForm{
+    background-color: transparent;
 }
 
 a, .btn-link {
