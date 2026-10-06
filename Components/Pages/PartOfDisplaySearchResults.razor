@@ -19,18 +19,18 @@
                 int offset = (NovelParametersForPageCount.CurrentPageNumber -1) * lim;
                 int currentPageIndex = 1;
                 
-                <div>@ToCheckQueryParam</div>
-                <div>DisplayTimes:@NovelParametersForPageCount.TheNumberOfDisplayingTimes</div>
-                <div>CalculateAllPages:@CalculateAllPages()</div>
+                @*<div>@ToCheckQueryParam</div>*@
+                @*<div>DisplayTimes:@NovelParametersForPageCount.TheNumberOfDisplayingTimes</div>*@
+                <div>全ページ数:@CalculateAllPages()</div>
 
                 //this is `allcount` of novels. If There are some data in `LPC`, the number of `NovelsInChild` is displayed.
                 @if(!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
                 {
-                    <div>@LocalNovelStock!.Count</div>
+                    <div>検索ヒット数：@LocalNovelStock!.Count</div>
                 }
                 else
                 {
-                    <div>@GetAllcountForPageNumber</div>
+                    <div>検索ヒット数：@GetAllcountForPageNumber</div>
                 }
 
                 @if(!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
@@ -54,18 +54,33 @@
                             @foreach(var novel in NovelsInChildForDisplaying!)
                             {
                                 overRank = offset + currentPageIndex;
-                                <div style="color:red;">@overRank</div>
 
-                                <div>
-                                    <p>@novel.Title</p>
-                                    <p>@novel.Writer</p>
-                                    <p>@novel.Story</p>
-                                    <a href="@GetNovelURL(novel.Ncode)" target="_blank" rel="noopener noreferrer">@GetNovelURL(novel.Ncode)</a>
-                                    <p>@GenreMapper.GetGenreValue(novel.Genre)</p> 
-                                    <p>@novel.Keyword</p>
-                                    <p>@novel.General_all_no</p>
-                                    <p>@novel.Global_point</p>
-                                    <p>@novel.Novelupdated_at</p>
+                                <div class="card mb-4 shadow-sm">
+                                    <div class="card-header bg-transparent">
+                                        <span style="color:red; font-weight:bold;">
+                                            @overRank
+                                        </span>
+                                        <span class="ms-3">
+                                            @GenreMapper.GetGenreValue(novel.Genre)
+                                        </span>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <h4 class="card-title">
+                                            <a href="@GetNovelURL(novel.Ncode)" target="_blank" rel="noopener noreferrer">@novel.Title</a>
+                                        </h4>
+                                        <p class="card-subtitle mb-2 text-muted">@novel.Writer</p>
+                                        <p class="card-text">@novel.Story</p>
+                                        <p class="card-text">
+                                            <small class="text-muted">@novel.Keyword</small>
+                                        </p>
+                                    </div>
+
+                                    <div class="card-footer bg-transparent text-muted">
+                                        <small class="me-3">話数：@novel.General_all_no</small>
+                                        <small class="me-3">総合ポイント：@novel.Global_point</small>
+                                        <small>更新日：@novel.Novelupdated_at</small>
+                                    </div>
                                 </div>
                                 currentPageIndex++;
                             }
@@ -120,19 +135,34 @@
                         <div>
                             @foreach(var novel in NovelsInChildForDisplaying!)
                             {
-                                int overRank = offset + currentPageIndex;
-                                <div style="color:red;">@overRank</div>
+                                overRank = offset + currentPageIndex;
 
-                                <div>
-                                    <p>@novel.Title</p>
-                                    <p>@novel.Writer</p>
-                                    <p>@novel.Story</p>
-                                    <a href="@GetNovelURL(novel.Ncode)" target="_blank" rel="noopener noreferrer">@GetNovelURL(novel.Ncode)</a>
-                                    <p>@GenreMapper.GetGenreValue(novel.Genre)</p> 
-                                    <p>@novel.Keyword</p>
-                                    <p>@novel.General_all_no</p>
-                                    <p>@novel.Global_point</p>
-                                    <p>@novel.Novelupdated_at</p>
+                                <div class="card mb-4 shadow-sm">
+                                    <div class="card-header bg-transparent">
+                                        <span style="color:red; font-weight:bold;">
+                                            @overRank
+                                        </span>
+                                        <span class="ms-3">
+                                            @GenreMapper.GetGenreValue(novel.Genre)
+                                        </span>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <h4 class="card-title">
+                                            <a href="@GetNovelURL(novel.Ncode)" target="_blank" rel="noopener noreferrer">@novel.Title</a>
+                                        </h4>
+                                        <p class="card-subtitle mb-2 text-muted">@novel.Writer</p>
+                                        <p class="card-text">@novel.Story</p>
+                                        <p class="card-text">
+                                            <small class="text-muted">@novel.Keyword</small>
+                                        </p>
+                                    </div>
+
+                                    <div class="card-footer bg-transparent text-muted">
+                                        <small class="me-3">話数：@novel.General_all_no</small>
+                                        <small class="me-3">総合ポイント：@novel.Global_point</small>
+                                        <small>更新日：@novel.Novelupdated_at</small>
+                                    </div>
                                 </div>
                                 currentPageIndex++;
                             }
