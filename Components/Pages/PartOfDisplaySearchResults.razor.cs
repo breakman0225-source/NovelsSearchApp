@@ -1,6 +1,7 @@
 //Those line is used for using directive.
 using System.Runtime.CompilerServices;
 using System.Security.Principal;
+using Microsoft.JSInterop;
 using NovelsSearchApp.Components.Pages.UserInput;
 using NovelsSearchApp.Models;
 
@@ -177,6 +178,9 @@ public partial class PartOfDisplaySearchResults
                 //`await` is needed because delegated method `DisplayResults` has the function to get API, with network communication.
             }
         }
+
+        // Reset the scroll position to the top of the search results after pagination.
+        await JSRuntime.InvokeVoidAsync("eval", "document.getElementById('novel-list-top').scrollIntoView()");
     }
 
     private string GetNovelURL(string ncode)

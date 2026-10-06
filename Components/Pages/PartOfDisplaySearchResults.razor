@@ -1,7 +1,5 @@
-@using Microsoft.VisualBasic
-@using NovelsSearchApp.Components.Pages;
-@using NovelsSearchApp.Components.Pages.UserInput;
 @using NovelsSearchApp.Models
+@inject IJSRuntime JSRuntime
 @rendermode InteractiveServer
 
 @namespace NovelsSearchApp.Components.Pages
@@ -21,7 +19,7 @@
                 
                 @*<div>@ToCheckQueryParam</div>*@
                 @*<div>DisplayTimes:@NovelParametersForPageCount.TheNumberOfDisplayingTimes</div>*@
-                <div>全ページ数:@CalculateAllPages()</div>
+                <div id="novel-list-top">全ページ数:@CalculateAllPages()</div>
 
                 //this is `allcount` of novels. If There are some data in `LPC`, the number of `NovelsInChild` is displayed.
                 @if(!string.IsNullOrWhiteSpace(NovelParametersForPageCount.LowPriorityCriteria))
