@@ -1,7 +1,7 @@
 # Online Novel Search WebApp (なろう小説 拡張検索サイト)
 
 
-
+<img width="2698" height="1554" alt="NovelSearchAppGifAnimation2" src="https://github.com/user-attachments/assets/a8bd723d-166e-4c57-9753-6ed800370bad" />
 
 
 ##  プロジェクト概要
